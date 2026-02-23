@@ -20,7 +20,6 @@ import SpendingNudges from './SpendingNudges'
 import RecurringExpenses from './RecurringExpenses'
 import { useRecurring } from '../hooks/useRecurring'
 import AskAI from './AskAI'
-import SavingsSuggestions from './SavingsSuggestions'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -230,9 +229,6 @@ export default function Dashboard() {
           selectedYear={selectedYear}
           onManage={() => setBudgetManagerOpen(true)}
         />
-
-        {/* Smart savings tips */}
-        <SavingsSuggestions expenses={expenses} />
 
         {/* Monthly trend */}
         <MonthlyTrends

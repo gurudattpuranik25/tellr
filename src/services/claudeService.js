@@ -22,8 +22,13 @@ const CATEGORIES = [
   'Other',
 ]
 
+function localDate() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 export async function parseExpense(text) {
-  const today = new Date().toISOString().split('T')[0]
+  const today = localDate()
 
   const systemPrompt = `You are an expense parser. Given a natural language expense description, extract:
 - amount (number, required — the rupee amount spent, in INR)
@@ -69,7 +74,7 @@ Respond ONLY in valid JSON format, no markdown, no explanation, no code blocks:
 // ─── Receipt scanning via Claude Vision ──────────────────────────────────────
 
 export async function parseReceiptImage(base64Data, mediaType = 'image/jpeg') {
-  const today = new Date().toISOString().split('T')[0]
+  const today = localDate()
 
   const systemPrompt = `You are a receipt scanner. Extract expense details from the receipt image.
 Respond ONLY in valid JSON, no markdown, no explanation:

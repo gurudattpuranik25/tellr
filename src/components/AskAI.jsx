@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react'
+import { MessageCircle, X, Send, Loader2, Sparkles, Lightbulb } from 'lucide-react'
 import { askExpenses } from '../services/claudeService'
+import SavingsSuggestions from './SavingsSuggestions'
 
 const STARTER_QUESTIONS = [
   'How much did I spend this month?',
@@ -12,6 +13,7 @@ const STARTER_QUESTIONS = [
 
 export default function AskAI({ expenses }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [showTips, setShowTips] = useState(false)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +56,26 @@ export default function AskAI({ expenses }) {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Tips modal */}
+      <SavingsSuggestions
+        isOpen={showTips}
+        onClose={() => setShowTips(false)}
+        expenses={expenses}
+      />
+
+      {/* Lightbulb button — above chat button */}
+      <motion.button
+        onClick={() => setShowTips(o => !o)}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+        className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-amber-500 hover:bg-amber-400 rounded-full shadow-xl shadow-amber-500/30 flex items-center justify-center transition-colors duration-200"
+        aria-label="Smart savings tips"
+        title="Smart savings tips"
+      >
+        <Lightbulb className="w-6 h-6 text-white" />
+      </motion.button>
+
+      {/* Chat button */}
       <motion.button
         onClick={() => setIsOpen(o => !o)}
         whileHover={{ scale: 1.08 }}

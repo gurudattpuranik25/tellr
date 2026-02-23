@@ -196,7 +196,7 @@ export default function EditExpenseModal({ expense, onSave, onClose }) {
                     <input
                       type="date"
                       value={form.date}
-                      max={new Date().toISOString().split('T')[0]}
+                      max={(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` })()}
                       onChange={e => handleChange('date', e.target.value)}
                       className={`w-full bg-slate-800/80 border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none transition-all duration-200 font-body [color-scheme:dark] ${
                         errors.date

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, Plus, Trash2, Users, CheckCircle2,
-  Loader2, Search, X, Receipt,
+  Loader2, Search, X, Receipt, Pencil, Check,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -11,7 +11,10 @@ import Navbar from './Navbar'
 import AddGroupExpense from './AddGroupExpense'
 import { useAuth } from '../hooks/useAuth'
 import { useGroupDetail } from '../hooks/useGroupDetail'
-import { deleteGroupExpense, addSettlement, addMemberToGroup } from '../services/groupService'
+import {
+  deleteGroupExpense, addSettlement, addMemberToGroup,
+  updateGroupName, deleteGroup,
+} from '../services/groupService'
 import { findUserByEmail } from '../services/userService'
 
 const CATEGORY_EMOJIS = {
@@ -174,12 +177,48 @@ export default function GroupDetail() {
   const [showAddExpense, setShowAddExpense] = useState(false)
   const [showAddMember, setShowAddMember] = useState(false)
 
+  // Rename state
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
+  const [savingName, setSavingName] = useState(false)
+
+  // Delete state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
   const handleDeleteExpense = async (expenseId) => {
     try {
       await deleteGroupExpense(groupId, expenseId)
       toast.success('Expense removed')
     } catch {
       toast.error('Failed to delete')
+    }
+  }
+
+  const handleRename = async () => {
+    const trimmed = nameInput.trim()
+    if (!trimmed || trimmed === group.name) { setIsEditingName(false); return }
+    setSavingName(true)
+    try {
+      await updateGroupName(groupId, trimmed)
+      toast.success('Group renamed')
+      setIsEditingName(false)
+    } catch {
+      toast.error('Failed to rename group')
+    } finally {
+      setSavingName(false)
+    }
+  }
+
+  const handleDeleteGroup = async () => {
+    setDeleting(true)
+    try {
+      await deleteGroup(groupId)
+      toast.success('Group deleted')
+      navigate('/groups')
+    } catch {
+      toast.error('Failed to delete group')
+      setDeleting(false)
     }
   }
 
@@ -227,9 +266,48 @@ export default function GroupDetail() {
             <ArrowLeft className="w-4 h-4" /> Back to Groups
           </button>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-heading font-bold text-white">{group.name}</h2>
+              {/* Group name — inline editable */}
+              {isEditingName ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    value={nameInput}
+                    onChange={(e) => setNameInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleRename()
+                      if (e.key === 'Escape') setIsEditingName(false)
+                    }}
+                    autoFocus
+                    className="text-2xl font-heading font-bold text-white bg-transparent border-b-2 border-blue-500 focus:outline-none min-w-0 w-48 sm:w-64"
+                  />
+                  <button
+                    onClick={handleRename}
+                    disabled={savingName || !nameInput.trim()}
+                    className="p-1.5 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-400 hover:bg-blue-600/30 disabled:opacity-40 transition-all"
+                  >
+                    {savingName ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                  </button>
+                  <button
+                    onClick={() => setIsEditingName(false)}
+                    className="p-1.5 rounded-lg text-slate-600 hover:text-slate-400 transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <h2 className="text-2xl font-heading font-bold text-white">{group.name}</h2>
+                  <button
+                    onClick={() => { setNameInput(group.name); setIsEditingName(true) }}
+                    className="p-1.5 rounded-lg text-slate-700 hover:text-slate-400 transition-colors"
+                    title="Rename group"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               <div className="flex items-center gap-2 mt-2">
                 <div className="flex -space-x-2">
                   {(group.members || []).slice(0, 6).map((m) => (
@@ -247,14 +325,59 @@ export default function GroupDetail() {
                 </button>
               </div>
             </div>
-            <button
-              onClick={() => setShowAddExpense(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold font-heading transition-colors shadow-lg shadow-blue-500/20 self-start sm:self-auto"
-            >
-              <Plus className="w-4 h-4" />
-              Add Expense
-            </button>
+
+            {/* Action buttons */}
+            <div className="flex items-center gap-2 self-start sm:self-auto">
+              <button
+                onClick={() => setShowAddExpense(true)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold font-heading transition-colors shadow-lg shadow-blue-500/20"
+              >
+                <Plus className="w-4 h-4" />
+                Add Expense
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm((v) => !v)}
+                className="p-2.5 rounded-xl border border-slate-700/50 text-slate-500 hover:text-rose-400 hover:border-rose-500/30 hover:bg-rose-500/5 transition-all"
+                title="Delete group"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
+
+          {/* Delete confirmation bar */}
+          <AnimatePresence>
+            {showDeleteConfirm && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 rounded-xl bg-rose-500/8 border border-rose-500/25">
+                  <p className="text-sm text-slate-300 font-body">
+                    Delete <span className="text-white font-medium">"{group.name}"</span>? All expenses and balances will be permanently removed.
+                  </p>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => setShowDeleteConfirm(false)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium font-body text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-700/60 transition-all"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleDeleteGroup}
+                      disabled={deleting}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold font-body text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50 transition-all flex items-center gap-1.5"
+                    >
+                      {deleting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                      Delete group
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* Balances */}

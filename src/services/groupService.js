@@ -4,7 +4,9 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   updateDoc,
+  writeBatch,
   query,
   where,
   orderBy,
@@ -74,6 +76,20 @@ export async function addMemberToGroup(groupId, member) {
     ],
     memberUids: [...data.memberUids, member.uid],
   })
+}
+
+export async function updateGroupName(groupId, name) {
+  await updateDoc(doc(db, 'groups', groupId), { name: name.trim() })
+}
+
+export async function deleteGroup(groupId) {
+  const batch = writeBatch(db)
+  const expSnap = await getDocs(collection(db, 'groups', groupId, 'expenses'))
+  expSnap.docs.forEach((d) => batch.delete(d.ref))
+  const setSnap = await getDocs(collection(db, 'groups', groupId, 'settlements'))
+  setSnap.docs.forEach((d) => batch.delete(d.ref))
+  batch.delete(doc(db, 'groups', groupId))
+  await batch.commit()
 }
 
 // ─── Group Expenses ────────────────────────────────────────────────────────────
