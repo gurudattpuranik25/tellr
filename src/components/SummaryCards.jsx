@@ -40,7 +40,14 @@ function useCountUp(target, duration = 800) {
   return count
 }
 
-function StatCard({ icon: Icon, label, value, subValue, iconColor, delay = 0 }) {
+function StatCard({ icon: Icon, label, value, subValue, iconColor, delay = 0, trend }) {
+  const trendStyles = {
+    up:      { cls: 'bg-rose-500/10 border-rose-500/20 text-rose-400',     arrow: '▲' },
+    down:    { cls: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400', arrow: '▼' },
+    neutral: { cls: 'bg-slate-800/40 border-slate-700/40 text-slate-500',   arrow: '●' },
+  }
+  const ts = trend ? trendStyles[trend.direction] : null
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -62,6 +69,12 @@ function StatCard({ icon: Icon, label, value, subValue, iconColor, delay = 0 }) 
       <div>
         <p className="text-2xl font-bold font-heading text-white leading-none">{value}</p>
         <p className="text-sm text-slate-400 mt-1 font-body">{label}</p>
+        {trend && ts && (
+          <div className={`mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${ts.cls}`}>
+            <span>{ts.arrow}</span>
+            <span className="font-body">{trend.label}</span>
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -99,12 +112,35 @@ export default function SummaryCards({ expenses, selectedMonth, selectedYear }) 
     }, {})
     const topCategory = Object.entries(catTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || null
 
-    return { totalMonth, totalToday, txCount, topCategory }
+    // Previous month for trend badge
+    const prevM = month === 0 ? 11 : month - 1
+    const prevY = month === 0 ? year - 1 : year
+    const prevTotal = expenses
+      .filter(e => {
+        const d = e.date instanceof Date ? e.date : new Date(e.date)
+        return d.getMonth() === prevM && d.getFullYear() === prevY
+      })
+      .reduce((s, e) => s + e.amount, 0)
+
+    let monthTrend = null
+    if (prevTotal > 0) {
+      const pct = ((totalMonth - prevTotal) / prevTotal) * 100
+      const direction = Math.abs(pct) < 2 ? 'neutral' : pct > 0 ? 'up' : 'down'
+      monthTrend = {
+        direction,
+        label: direction === 'neutral'
+          ? 'vs last month'
+          : `${Math.abs(pct).toFixed(1)}% vs last month`,
+      }
+    }
+
+    return { totalMonth, totalToday, txCount, topCategory, monthTrend }
   }, [expenses, selectedMonth, selectedYear])
 
   const monthTotal = useCountUp(stats.totalMonth)
   const todayTotal = useCountUp(stats.totalToday)
   const txCount = useCountUp(stats.txCount)
+  const { monthTrend } = stats
 
   const isCurrentMonth = () => {
     const now = new Date()
@@ -121,6 +157,7 @@ export default function SummaryCards({ expenses, selectedMonth, selectedYear }) 
         subValue="this month"
         iconColor="bg-blue-500/20 text-blue-400"
         delay={0}
+        trend={monthTrend}
       />
       <StatCard
         icon={TrendingUp}

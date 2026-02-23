@@ -8,6 +8,7 @@ import MagicInput from './MagicInput'
 import SummaryCards from './SummaryCards'
 import ExpenseTable from './ExpenseTable'
 import Charts from './Charts'
+import MonthlyTrends from './MonthlyTrends'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
 import { parseExpense } from '../services/claudeService'
@@ -184,6 +185,13 @@ export default function Dashboard() {
 
         {/* Summary cards */}
         <SummaryCards
+          expenses={expenses}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
+
+        {/* Monthly trend */}
+        <MonthlyTrends
           expenses={expenses}
           selectedMonth={selectedMonth}
           selectedYear={selectedYear}
