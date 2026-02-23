@@ -149,9 +149,7 @@ export async function askExpenses(chatMessages, expenses) {
   const summary = buildExpenseSummary(expenses)
   const today = new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })
 
-  const systemPrompt = `You are a friendly personal finance assistant for an expense tracker app called Tellr.
-You have the user's expense data below. Answer questions about their spending, give insights, and provide advice.
-Be concise, conversational, and specific. Use ₹ for amounts. Today is ${today}.
+  const systemPrompt = `You are a finance assistant for Tellr. Answer in 1-3 short sentences max. Be direct — state numbers, no preamble, no methodology. Use ₹. Today is ${today}.
 
 ${summary}`
 

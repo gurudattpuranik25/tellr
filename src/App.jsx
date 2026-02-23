@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import LandingPage from './components/LandingPage'
 import Dashboard from './components/Dashboard'
+import Groups from './components/Groups'
+import GroupDetail from './components/GroupDetail'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useAuth } from './hooks/useAuth'
 
@@ -34,12 +36,8 @@ function App() {
             fontSize: '14px',
             fontFamily: '"DM Sans", sans-serif',
           },
-          success: {
-            iconTheme: { primary: '#10b981', secondary: '#f8fafc' },
-          },
-          error: {
-            iconTheme: { primary: '#ef4444', secondary: '#f8fafc' },
-          },
+          success: { iconTheme: { primary: '#10b981', secondary: '#f8fafc' } },
+          error: { iconTheme: { primary: '#ef4444', secondary: '#f8fafc' } },
         }}
       />
       <Routes>
@@ -49,11 +47,15 @@ function App() {
         />
         <Route
           path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+        />
+        <Route
+          path="/groups"
+          element={<ProtectedRoute><Groups /></ProtectedRoute>}
+        />
+        <Route
+          path="/groups/:id"
+          element={<ProtectedRoute><GroupDetail /></ProtectedRoute>}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
