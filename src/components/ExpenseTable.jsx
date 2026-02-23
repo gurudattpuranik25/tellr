@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Receipt, Pencil, Search, X, ArrowUpDown, SlidersHorizontal } from 'lucide-react'
+import { Trash2, Receipt, Pencil, Search, X, ArrowUpDown, SlidersHorizontal, Repeat } from 'lucide-react'
 import EditExpenseModal from './EditExpenseModal'
 
 const CATEGORY_CONFIG = {
@@ -88,7 +88,7 @@ function FilterSelect({ value, onChange, children, icon: Icon }) {
   )
 }
 
-export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, selectedMonth, selectedYear }) {
+export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, selectedMonth, selectedYear, recurringIds = new Set() }) {
   const [editingExpense, setEditingExpense] = useState(null)
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('all')
@@ -408,9 +408,17 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                     </td>
 
                     <td className="px-4 py-3.5 max-w-[180px]">
-                      <p className="text-sm text-white font-medium truncate font-body">
-                        {expense.description}
-                      </p>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className="text-sm text-white font-medium truncate font-body">
+                          {expense.description}
+                        </p>
+                        {recurringIds.has(expense.id) && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs bg-violet-500/15 text-violet-400 border border-violet-500/25 flex-shrink-0">
+                            <Repeat className="w-2.5 h-2.5" />
+                            <span className="hidden sm:inline">Recurring</span>
+                          </span>
+                        )}
+                      </div>
                       {expense.text && (
                         <p className="text-xs text-slate-600 truncate mt-0.5 font-body hidden sm:block">
                           "{expense.text.slice(0, 50)}{expense.text.length > 50 ? '…' : ''}"

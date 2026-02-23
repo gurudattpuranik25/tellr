@@ -17,6 +17,8 @@ import { addExpense, deleteExpense, updateExpense } from '../services/expenseSer
 import BudgetProgress from './BudgetProgress'
 import BudgetManager from './BudgetManager'
 import SpendingNudges from './SpendingNudges'
+import RecurringExpenses from './RecurringExpenses'
+import { useRecurring } from '../hooks/useRecurring'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -69,6 +71,7 @@ export default function Dashboard() {
   const { user } = useAuth()
   const { expenses, loading } = useExpenses(user?.uid)
   const { budgets } = useBudgets(user?.uid)
+  const { recurringIds, recurringGroups } = useRecurring(expenses)
   const [budgetManagerOpen, setBudgetManagerOpen] = useState(false)
 
   const now = new Date()
@@ -227,7 +230,11 @@ export default function Dashboard() {
           loading={loading}
           selectedMonth={selectedMonth}
           selectedYear={selectedYear}
+          recurringIds={recurringIds}
         />
+
+        {/* Recurring expenses */}
+        <RecurringExpenses recurringGroups={recurringGroups} />
 
         {/* Charts */}
         <Charts
