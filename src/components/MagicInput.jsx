@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ArrowRight, Loader2 } from 'lucide-react'
+import { Sparkles, ArrowRight, Loader2, Camera } from 'lucide-react'
 
 const PLACEHOLDER_EXAMPLES = [
   'Spent 250 on lunch at Swiggy...',
@@ -48,11 +48,13 @@ function useTypewriter(texts, speed = 60, pause = 2000) {
   return displayText
 }
 
-export default function MagicInput({ onSubmit, disabled }) {
+export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const [isParsing, setIsParsing] = useState(false)
+  const [isScanning, setIsScanning] = useState(false)
   const inputRef = useRef(null)
+  const fileInputRef = useRef(null)
   const placeholder = useTypewriter(PLACEHOLDER_EXAMPLES)
 
   const handleSubmit = async (e) => {
@@ -77,8 +79,50 @@ export default function MagicInput({ onSubmit, disabled }) {
     }
   }
 
+  const handleCameraClick = () => {
+    if (isScanning || isParsing || disabled) return
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file || !onScanReceipt) return
+
+    // Reset so same file can be picked again
+    e.target.value = ''
+
+    const reader = new FileReader()
+    reader.onload = async (ev) => {
+      const dataUrl = ev.target.result
+      // dataUrl = "data:image/jpeg;base64,..."
+      const base64 = dataUrl.split(',')[1]
+      const mediaType = file.type || 'image/jpeg'
+
+      setIsScanning(true)
+      try {
+        await onScanReceipt(base64, mediaType)
+      } finally {
+        setIsScanning(false)
+        inputRef.current?.focus()
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const isBusy = isParsing || isScanning
+
   return (
     <div className="w-full max-w-3xl mx-auto">
+      {/* Hidden file input for receipt scanning */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleFileChange}
+        className="hidden"
+      />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -100,7 +144,7 @@ export default function MagicInput({ onSubmit, disabled }) {
         <form onSubmit={handleSubmit} className="relative">
           <div
             className={`relative flex items-center rounded-2xl border transition-all duration-300 ${
-              isParsing
+              isBusy
                 ? 'border-blue-500/50 bg-slate-900/90'
                 : isFocused
                 ? 'border-blue-500 bg-slate-900'
@@ -110,8 +154,8 @@ export default function MagicInput({ onSubmit, disabled }) {
               boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.15), 0 0 40px rgba(59, 130, 246, 0.08)'
             } : {}}
           >
-            {/* Shimmer overlay while parsing */}
-            {isParsing && (
+            {/* Shimmer overlay while busy */}
+            {isBusy && (
               <div
                 className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
                 style={{
@@ -122,9 +166,9 @@ export default function MagicInput({ onSubmit, disabled }) {
               />
             )}
 
-            {/* Icon */}
+            {/* Left icon */}
             <div className="pl-5 pr-3 flex-shrink-0">
-              {isParsing ? (
+              {isBusy ? (
                 <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
               ) : (
                 <Sparkles className={`w-5 h-5 transition-colors duration-200 ${
@@ -143,7 +187,7 @@ export default function MagicInput({ onSubmit, disabled }) {
                 onKeyDown={handleKeyDown}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                disabled={isParsing || disabled}
+                disabled={isBusy || disabled}
                 className="w-full bg-transparent text-white text-lg py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
                 placeholder={placeholder}
                 autoComplete="off"
@@ -151,7 +195,6 @@ export default function MagicInput({ onSubmit, disabled }) {
                 spellCheck={false}
               />
 
-              {/* Animated placeholder (only shown when empty and not focused enough to hide) */}
               {!value && !isFocused && (
                 <div className="absolute inset-0 flex items-center pointer-events-none">
                   <span className="text-slate-500 text-lg font-body">
@@ -169,15 +212,35 @@ export default function MagicInput({ onSubmit, disabled }) {
               )}
             </div>
 
-            {/* Submit button */}
-            <div className="pr-3">
+            {/* Right buttons */}
+            <div className="pr-3 flex items-center gap-2">
+              {/* Camera / receipt scan button */}
+              {onScanReceipt && (
+                <motion.button
+                  type="button"
+                  onClick={handleCameraClick}
+                  disabled={isBusy || disabled}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Scan receipt"
+                  className={`p-2 rounded-xl transition-all duration-200 ${
+                    isBusy || disabled
+                      ? 'text-slate-600 cursor-not-allowed'
+                      : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                  }`}
+                >
+                  <Camera className="w-4 h-4" />
+                </motion.button>
+              )}
+
+              {/* Submit button */}
               <motion.button
                 type="submit"
-                disabled={!value.trim() || isParsing || disabled}
+                disabled={!value.trim() || isBusy || disabled}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 font-heading ${
-                  value.trim() && !isParsing
+                  value.trim() && !isBusy
                     ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                 }`}
@@ -198,7 +261,7 @@ export default function MagicInput({ onSubmit, disabled }) {
           </div>
         </form>
 
-        {/* Parsing status text */}
+        {/* Status text */}
         <AnimatePresence>
           {isParsing && (
             <motion.p
@@ -210,12 +273,24 @@ export default function MagicInput({ onSubmit, disabled }) {
               ✨ Claude is parsing your expense...
             </motion.p>
           )}
+          {isScanning && (
+            <motion.p
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              className="text-center text-blue-400 text-sm mt-3 font-body"
+            >
+              📷 Scanning receipt with Claude Vision...
+            </motion.p>
+          )}
         </AnimatePresence>
 
         {/* Hint text */}
-        {!isParsing && (
+        {!isBusy && (
           <p className="text-center text-slate-600 text-xs mt-3 font-body">
-            Press <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-500 text-xs border border-slate-700">Enter</kbd> to add • Claude auto-parses category, vendor & date
+            Press <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-500 text-xs border border-slate-700">Enter</kbd> to add
+            {onScanReceipt && <> • <Camera className="w-3 h-3 inline mb-0.5 mx-0.5" /> to scan a receipt</>}
+            {' '}• Claude auto-parses category, vendor &amp; date
           </p>
         )}
       </motion.div>

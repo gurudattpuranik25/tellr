@@ -12,13 +12,15 @@ import MonthlyTrends from './MonthlyTrends'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
 import { useBudgets } from '../hooks/useBudgets'
-import { parseExpense } from '../services/claudeService'
+import { parseExpense, parseReceiptImage } from '../services/claudeService'
 import { addExpense, deleteExpense, updateExpense } from '../services/expenseService'
 import BudgetProgress from './BudgetProgress'
 import BudgetManager from './BudgetManager'
 import SpendingNudges from './SpendingNudges'
 import RecurringExpenses from './RecurringExpenses'
 import { useRecurring } from '../hooks/useRecurring'
+import AskAI from './AskAI'
+import SavingsSuggestions from './SavingsSuggestions'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -89,10 +91,7 @@ export default function Dashboard() {
       await addExpense(user.uid, { ...parsed, text })
       toast.success(
         `Added ${parsed.description} — ₹${parsed.amount.toFixed(2)}`,
-        {
-          icon: '✨',
-          duration: 3500,
-        }
+        { icon: '✨', duration: 3500 }
       )
     } catch (err) {
       console.error('Parse error:', err)
@@ -103,6 +102,20 @@ export default function Dashboard() {
       } else {
         toast.error("Couldn't parse that. Please try again.")
       }
+    }
+  }
+
+  const handleScanReceipt = async (base64Data, mediaType) => {
+    try {
+      const parsed = await parseReceiptImage(base64Data, mediaType)
+      await addExpense(user.uid, { ...parsed, text: `Receipt: ${parsed.description}` })
+      toast.success(
+        `Scanned ${parsed.description} — ₹${parsed.amount.toFixed(2)}`,
+        { icon: '📷', duration: 3500 }
+      )
+    } catch (err) {
+      console.error('Receipt scan error:', err)
+      toast.error("Couldn't read that receipt. Try a clearer photo.")
     }
   }
 
@@ -165,7 +178,10 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <MagicInput onSubmit={handleAddExpense} />
+          <MagicInput
+            onSubmit={handleAddExpense}
+            onScanReceipt={handleScanReceipt}
+          />
         </motion.div>
 
         {/* Month selector + total */}
@@ -214,6 +230,9 @@ export default function Dashboard() {
           selectedYear={selectedYear}
           onManage={() => setBudgetManagerOpen(true)}
         />
+
+        {/* Smart savings tips */}
+        <SavingsSuggestions expenses={expenses} />
 
         {/* Monthly trend */}
         <MonthlyTrends
@@ -264,6 +283,9 @@ export default function Dashboard() {
           </span>
         </motion.div>
       </div>
+
+      {/* Floating AI chat — rendered outside the padded container so it overlays correctly */}
+      <AskAI expenses={expenses} />
     </div>
   )
 }

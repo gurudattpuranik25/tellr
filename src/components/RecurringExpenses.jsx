@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Repeat } from 'lucide-react'
+import { Repeat, Bell } from 'lucide-react'
 
 const CATEGORY_EMOJIS = {
   'Food & Dining': '🍽️', 'Groceries': '🛒', 'Housing/Rent': '🏠',
@@ -12,6 +12,23 @@ const CATEGORY_EMOJIS = {
 function capitalize(str) {
   if (!str) return ''
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+
+function isDueSoon(typicalDay) {
+  if (!typicalDay) return false
+  const now = new Date()
+  const today = now.getDate()
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  const daysUntil = typicalDay >= today
+    ? typicalDay - today
+    : daysInMonth - today + typicalDay
+  return daysUntil <= 5
 }
 
 export default function RecurringExpenses({ recurringGroups }) {
@@ -40,35 +57,53 @@ export default function RecurringExpenses({ recurringGroups }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-        {recurringGroups.map((group, i) => (
-          <motion.div
-            key={`${group.category}-${group.name}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.04 }}
-            className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/40 transition-colors"
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-base flex-shrink-0">
-                {CATEGORY_EMOJIS[group.category] || '📦'}
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-slate-200 font-body truncate">
-                  {capitalize(group.name)}
-                </p>
-                <p className="text-xs text-slate-500 font-body">
-                  {group.monthCount} month{group.monthCount > 1 ? 's' : ''} detected
-                </p>
+        {recurringGroups.map((group, i) => {
+          const dueSoon = isDueSoon(group.typicalDay)
+          return (
+            <motion.div
+              key={`${group.category}-${group.name}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.04 }}
+              className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border transition-colors ${
+                dueSoon
+                  ? 'bg-amber-500/5 border-amber-500/25 hover:border-amber-500/40'
+                  : 'bg-slate-800/40 border-slate-700/40 hover:border-slate-600/40'
+              }`}
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-base flex-shrink-0">
+                  {CATEGORY_EMOJIS[group.category] || '📦'}
+                </span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-sm font-medium text-slate-200 font-body truncate">
+                      {capitalize(group.name)}
+                    </p>
+                    {dueSoon && (
+                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-xs bg-amber-500/15 text-amber-400 border border-amber-500/25 flex-shrink-0 font-body">
+                        <Bell className="w-2.5 h-2.5" />
+                        Due soon
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 font-body">
+                    {group.monthCount} month{group.monthCount > 1 ? 's' : ''} detected
+                    {group.typicalDay && (
+                      <span className="text-slate-600"> · ~{ordinal(group.typicalDay)}</span>
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex-shrink-0 text-right">
-              <p className="text-sm font-semibold font-heading text-white tabular-nums">
-                ₹{group.avgAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-              </p>
-              <p className="text-xs text-slate-600 font-body">/month</p>
-            </div>
-          </motion.div>
-        ))}
+              <div className="flex-shrink-0 text-right">
+                <p className="text-sm font-semibold font-heading text-white tabular-nums">
+                  ₹{group.avgAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                </p>
+                <p className="text-xs text-slate-600 font-body">/month</p>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
 
       <p className="mt-4 text-xs text-slate-600 font-body">
