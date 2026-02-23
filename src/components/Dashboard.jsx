@@ -16,6 +16,7 @@ import { parseExpense } from '../services/claudeService'
 import { addExpense, deleteExpense, updateExpense } from '../services/expenseService'
 import BudgetProgress from './BudgetProgress'
 import BudgetManager from './BudgetManager'
+import SpendingNudges from './SpendingNudges'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -190,6 +191,13 @@ export default function Dashboard() {
 
         {/* Summary cards */}
         <SummaryCards
+          expenses={expenses}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
+
+        {/* Spending nudges */}
+        <SpendingNudges
           expenses={expenses}
           selectedMonth={selectedMonth}
           selectedYear={selectedYear}
