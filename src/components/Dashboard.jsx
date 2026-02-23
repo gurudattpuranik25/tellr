@@ -1,0 +1,231 @@
+import { useState, useMemo } from 'react'
+import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight, Sparkles, CalendarDays } from 'lucide-react'
+import toast from 'react-hot-toast'
+
+import Navbar from './Navbar'
+import MagicInput from './MagicInput'
+import SummaryCards from './SummaryCards'
+import ExpenseTable from './ExpenseTable'
+import Charts from './Charts'
+import { useAuth } from '../hooks/useAuth'
+import { useExpenses } from '../hooks/useExpenses'
+import { parseExpense } from '../services/claudeService'
+import { addExpense, deleteExpense, updateExpense } from '../services/expenseService'
+
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
+function MonthSelector({ selectedMonth, selectedYear, onChange }) {
+  const now = new Date()
+  const isCurrentMonth = selectedMonth === now.getMonth() && selectedYear === now.getFullYear()
+
+  const prev = () => {
+    if (selectedMonth === 0) onChange(11, selectedYear - 1)
+    else onChange(selectedMonth - 1, selectedYear)
+  }
+
+  const next = () => {
+    if (isCurrentMonth) return
+    if (selectedMonth === 11) onChange(0, selectedYear + 1)
+    else onChange(selectedMonth + 1, selectedYear)
+  }
+
+  return (
+    <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700/60 rounded-xl px-1 py-1">
+      <button
+        onClick={prev}
+        className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors duration-200"
+      >
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+
+      <div className="flex items-center gap-1.5 px-3 min-w-[160px] justify-center">
+        <CalendarDays className="w-3.5 h-3.5 text-slate-500" />
+        <span className="text-sm font-medium font-heading text-slate-200 whitespace-nowrap">
+          {MONTH_NAMES[selectedMonth]} {selectedYear}
+        </span>
+      </div>
+
+      <button
+        onClick={next}
+        disabled={isCurrentMonth}
+        className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <ChevronRight className="w-4 h-4" />
+      </button>
+    </div>
+  )
+}
+
+export default function Dashboard() {
+  const { user } = useAuth()
+  const { expenses, loading } = useExpenses(user?.uid)
+
+  const now = new Date()
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear())
+
+  const handleMonthChange = (month, year) => {
+    setSelectedMonth(month)
+    setSelectedYear(year)
+  }
+
+  const handleAddExpense = async (text) => {
+    try {
+      const parsed = await parseExpense(text)
+      await addExpense(user.uid, { ...parsed, text })
+      toast.success(
+        `Added ${parsed.description} — ₹${parsed.amount.toFixed(2)}`,
+        {
+          icon: '✨',
+          duration: 3500,
+        }
+      )
+    } catch (err) {
+      console.error('Parse error:', err)
+      if (err.message?.includes('JSON') || err.message?.includes('valid amount')) {
+        toast.error("Couldn't understand that expense. Try being more specific.")
+      } else if (err.message?.includes('API') || err.status === 401) {
+        toast.error('API key error. Check your VITE_ANTHROPIC_API_KEY in .env')
+      } else {
+        toast.error("Couldn't parse that. Please try again.")
+      }
+    }
+  }
+
+  const handleUpdateExpense = async (expenseId, updates) => {
+    try {
+      await updateExpense(user.uid, expenseId, updates)
+      toast.success('Expense updated')
+    } catch {
+      toast.error('Failed to update expense')
+    }
+  }
+
+  const handleDeleteExpense = async (expenseId) => {
+    try {
+      await deleteExpense(user.uid, expenseId)
+      toast.success('Expense deleted')
+    } catch {
+      toast.error('Failed to delete expense')
+    }
+  }
+
+  // Monthly total for the header
+  const monthTotal = useMemo(() => {
+    return expenses
+      .filter((e) => {
+        const d = e.date instanceof Date ? e.date : new Date(e.date)
+        return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear
+      })
+      .reduce((s, e) => s + e.amount, 0)
+  }, [expenses, selectedMonth, selectedYear])
+
+  return (
+    <div className="min-h-screen bg-slate-950">
+      {/* Background blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-600/4 rounded-full blur-3xl" />
+      </div>
+
+      <Navbar />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        {/* Welcome + MagicInput */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center space-y-6"
+        >
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
+              {getGreeting()},{' '}
+              <span className="gradient-text">
+                {user?.displayName?.split(' ')[0] || 'there'}
+              </span>
+            </h2>
+            <p className="text-slate-500 text-sm mt-1 font-body">
+              What did you spend on today?
+            </p>
+          </div>
+
+          <MagicInput onSubmit={handleAddExpense} />
+        </motion.div>
+
+        {/* Month selector + total */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <MonthSelector
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            onChange={handleMonthChange}
+          />
+
+          {monthTotal > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="glass-card px-4 py-2 flex items-center gap-2"
+            >
+              <span className="text-slate-400 text-sm font-body">
+                {MONTH_NAMES[selectedMonth]} total:
+              </span>
+              <span className="text-white font-semibold font-heading">
+                ₹{monthTotal.toFixed(2)}
+              </span>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Summary cards */}
+        <SummaryCards
+          expenses={expenses}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
+
+        {/* Expense table */}
+        <ExpenseTable
+          expenses={expenses}
+          onDelete={handleDeleteExpense}
+          onUpdate={handleUpdateExpense}
+          loading={loading}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
+
+        {/* Charts */}
+        <Charts
+          expenses={expenses}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+        />
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="flex justify-center py-4"
+        >
+          <span className="text-slate-700 text-xs font-body flex items-center gap-1.5">
+            <Sparkles className="w-3 h-3" />
+            Powered by Claude AI
+          </span>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}

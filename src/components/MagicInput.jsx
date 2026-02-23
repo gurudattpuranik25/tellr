@@ -1,0 +1,224 @@
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, ArrowRight, Loader2 } from 'lucide-react'
+
+const PLACEHOLDER_EXAMPLES = [
+  'Spent 250 on lunch at Swiggy...',
+  'Paid 15000 for rent...',
+  'Netflix subscription 649...',
+  'Ola to airport 450 rupees...',
+  'Chai for 30 at Chaayos...',
+  'Groceries at DMart 1200...',
+  'Doctor visit 500...',
+  'New shoes at Myntra 2499...',
+]
+
+function useTypewriter(texts, speed = 60, pause = 2000) {
+  const [displayText, setDisplayText] = useState('')
+  const [textIndex, setTextIndex] = useState(0)
+  const [isTyping, setIsTyping] = useState(true)
+  const [charIndex, setCharIndex] = useState(0)
+
+  useEffect(() => {
+    if (isTyping) {
+      if (charIndex < texts[textIndex].length) {
+        const timeout = setTimeout(() => {
+          setDisplayText(texts[textIndex].slice(0, charIndex + 1))
+          setCharIndex(c => c + 1)
+        }, speed)
+        return () => clearTimeout(timeout)
+      } else {
+        const timeout = setTimeout(() => setIsTyping(false), pause)
+        return () => clearTimeout(timeout)
+      }
+    } else {
+      if (charIndex > 0) {
+        const timeout = setTimeout(() => {
+          setDisplayText(texts[textIndex].slice(0, charIndex - 1))
+          setCharIndex(c => c - 1)
+        }, speed / 2)
+        return () => clearTimeout(timeout)
+      } else {
+        setTextIndex(i => (i + 1) % texts.length)
+        setIsTyping(true)
+      }
+    }
+  }, [charIndex, isTyping, textIndex, texts, speed, pause])
+
+  return displayText
+}
+
+export default function MagicInput({ onSubmit, disabled }) {
+  const [value, setValue] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
+  const [isParsing, setIsParsing] = useState(false)
+  const inputRef = useRef(null)
+  const placeholder = useTypewriter(PLACEHOLDER_EXAMPLES)
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault()
+    const trimmed = value.trim()
+    if (!trimmed || isParsing || disabled) return
+
+    setIsParsing(true)
+    try {
+      await onSubmit(trimmed)
+      setValue('')
+    } finally {
+      setIsParsing(false)
+      inputRef.current?.focus()
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit()
+    }
+  }
+
+  return (
+    <div className="w-full max-w-3xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="relative"
+      >
+        {/* Glow effect behind input */}
+        <AnimatePresence>
+          {isFocused && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="absolute inset-0 rounded-2xl bg-blue-500/10 blur-xl -z-10"
+            />
+          )}
+        </AnimatePresence>
+
+        <form onSubmit={handleSubmit} className="relative">
+          <div
+            className={`relative flex items-center rounded-2xl border transition-all duration-300 ${
+              isParsing
+                ? 'border-blue-500/50 bg-slate-900/90'
+                : isFocused
+                ? 'border-blue-500 bg-slate-900'
+                : 'border-slate-700/80 bg-slate-900/60'
+            }`}
+            style={isFocused ? {
+              boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.15), 0 0 40px rgba(59, 130, 246, 0.08)'
+            } : {}}
+          >
+            {/* Shimmer overlay while parsing */}
+            {isParsing && (
+              <div
+                className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none"
+                style={{
+                  background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.05) 50%, transparent 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'shimmer 1.5s infinite',
+                }}
+              />
+            )}
+
+            {/* Icon */}
+            <div className="pl-5 pr-3 flex-shrink-0">
+              {isParsing ? (
+                <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+              ) : (
+                <Sparkles className={`w-5 h-5 transition-colors duration-200 ${
+                  isFocused ? 'text-blue-400' : 'text-slate-500'
+                }`} />
+              )}
+            </div>
+
+            {/* Input */}
+            <div className="relative flex-1">
+              <input
+                ref={inputRef}
+                type="text"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                disabled={isParsing || disabled}
+                className="w-full bg-transparent text-white text-lg py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
+                placeholder={placeholder}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+
+              {/* Animated placeholder (only shown when empty and not focused enough to hide) */}
+              {!value && !isFocused && (
+                <div className="absolute inset-0 flex items-center pointer-events-none">
+                  <span className="text-slate-500 text-lg font-body">
+                    {placeholder}
+                    <span className="cursor-blink ml-0.5 text-slate-600">|</span>
+                  </span>
+                </div>
+              )}
+              {!value && isFocused && (
+                <div className="absolute inset-0 flex items-center pointer-events-none">
+                  <span className="text-slate-600 text-lg font-body">
+                    Type an expense... Press Enter to parse
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Submit button */}
+            <div className="pr-3">
+              <motion.button
+                type="submit"
+                disabled={!value.trim() || isParsing || disabled}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 font-heading ${
+                  value.trim() && !isParsing
+                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                    : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                }`}
+              >
+                {isParsing ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span className="hidden sm:inline">Parsing</span>
+                  </>
+                ) : (
+                  <>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Add</span>
+                  </>
+                )}
+              </motion.button>
+            </div>
+          </div>
+        </form>
+
+        {/* Parsing status text */}
+        <AnimatePresence>
+          {isParsing && (
+            <motion.p
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              className="text-center text-blue-400 text-sm mt-3 font-body"
+            >
+              ✨ Claude is parsing your expense...
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {/* Hint text */}
+        {!isParsing && (
+          <p className="text-center text-slate-600 text-xs mt-3 font-body">
+            Press <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-500 text-xs border border-slate-700">Enter</kbd> to add • Claude auto-parses category, vendor & date
+          </p>
+        )}
+      </motion.div>
+    </div>
+  )
+}
