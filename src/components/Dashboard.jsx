@@ -11,8 +11,11 @@ import Charts from './Charts'
 import MonthlyTrends from './MonthlyTrends'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
+import { useBudgets } from '../hooks/useBudgets'
 import { parseExpense } from '../services/claudeService'
 import { addExpense, deleteExpense, updateExpense } from '../services/expenseService'
+import BudgetProgress from './BudgetProgress'
+import BudgetManager from './BudgetManager'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -64,6 +67,8 @@ function MonthSelector({ selectedMonth, selectedYear, onChange }) {
 export default function Dashboard() {
   const { user } = useAuth()
   const { expenses, loading } = useExpenses(user?.uid)
+  const { budgets } = useBudgets(user?.uid)
+  const [budgetManagerOpen, setBudgetManagerOpen] = useState(false)
 
   const now = new Date()
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
@@ -190,6 +195,15 @@ export default function Dashboard() {
           selectedYear={selectedYear}
         />
 
+        {/* Budget tracker */}
+        <BudgetProgress
+          expenses={expenses}
+          budgets={budgets}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
+          onManage={() => setBudgetManagerOpen(true)}
+        />
+
         {/* Monthly trend */}
         <MonthlyTrends
           expenses={expenses}
@@ -212,6 +226,14 @@ export default function Dashboard() {
           expenses={expenses}
           selectedMonth={selectedMonth}
           selectedYear={selectedYear}
+        />
+
+        {/* Budget manager modal */}
+        <BudgetManager
+          isOpen={budgetManagerOpen}
+          onClose={() => setBudgetManagerOpen(false)}
+          budgets={budgets}
+          userId={user?.uid}
         />
 
         {/* Footer */}
