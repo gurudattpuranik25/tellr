@@ -349,14 +349,102 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
           )}
         </AnimatePresence>
 
-        {/* ── Table ── */}
-        <div className="overflow-x-auto">
+        {/* ── Mobile cards ── */}
+        <div className="sm:hidden">
+          {loading ? (
+            <div className="divide-y divide-white/5">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="px-4 py-3.5 flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-slate-800/80 animate-pulse flex-shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-800/80 rounded animate-pulse w-3/4" />
+                    <div className="h-3 bg-slate-800/80 rounded animate-pulse w-1/2" />
+                  </div>
+                  <div className="h-4 bg-slate-800/80 rounded animate-pulse w-14" />
+                </div>
+              ))}
+            </div>
+          ) : displayedExpenses.length === 0 ? (
+            <div className="px-5 py-16 text-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-12 h-12 bg-slate-800/60 rounded-2xl flex items-center justify-center">
+                  {isFiltered
+                    ? <Search className="w-6 h-6 text-slate-600" />
+                    : <Receipt className="w-6 h-6 text-slate-600" />
+                  }
+                </div>
+                <div>
+                  <p className="text-slate-400 font-medium font-heading">
+                    {isFiltered ? 'No matching transactions' : 'No expenses yet'}
+                  </p>
+                  <p className="text-slate-600 text-sm mt-1 font-body">
+                    {isFiltered
+                      ? <button onClick={clearFilters} className="text-blue-400 hover:underline">Clear filters</button>
+                      : 'Type an expense above to get started'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="divide-y divide-white/5">
+              {displayedExpenses.map(expense => {
+                const config = CATEGORY_CONFIG[expense.category] || CATEGORY_CONFIG['Other']
+                return (
+                  <div key={expense.id} className="px-4 py-3 flex items-start gap-3">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-base ${config.bg} border ${config.border}`}>
+                      {config.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium text-white font-body truncate flex-1 min-w-0">
+                          {expense.description}
+                          {recurringIds.has(expense.id) && (
+                            <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-violet-500/15 text-violet-400 border border-violet-500/25">
+                              <Repeat className="w-2.5 h-2.5" />
+                            </span>
+                          )}
+                        </p>
+                        <span className="text-sm font-semibold text-white font-heading tabular-nums flex-shrink-0 ml-2">
+                          ₹{expense.amount.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-slate-500 font-body">
+                          {formatDate(expense.date)}
+                          {expense.vendor && expense.vendor !== 'Unknown' && ` · ${expense.vendor}`}
+                        </p>
+                        <div className="flex items-center gap-0.5">
+                          <button
+                            onClick={() => setEditingExpense(expense)}
+                            className="text-slate-500 hover:text-blue-400 p-1.5 rounded-lg hover:bg-blue-500/10 transition-colors duration-150"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => onDelete(expense.id)}
+                            className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors duration-150"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* ── Desktop table ── */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full min-w-[600px]">
             <thead>
               <tr className="border-b border-white/5">
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-5 py-3 font-heading">Date</th>
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading">Description</th>
-                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading hidden sm:table-cell">Vendor</th>
+                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading">Vendor</th>
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading">Category</th>
                 <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wider px-5 py-3 font-heading">Amount</th>
               </tr>
@@ -415,18 +503,18 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                         {recurringIds.has(expense.id) && (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs bg-violet-500/15 text-violet-400 border border-violet-500/25 flex-shrink-0">
                             <Repeat className="w-2.5 h-2.5" />
-                            <span className="hidden sm:inline">Recurring</span>
+                            <span>Recurring</span>
                           </span>
                         )}
                       </div>
                       {expense.text && (
-                        <p className="text-xs text-slate-600 truncate mt-0.5 font-body hidden sm:block">
+                        <p className="text-xs text-slate-600 truncate mt-0.5 font-body">
                           "{expense.text.slice(0, 50)}{expense.text.length > 50 ? '…' : ''}"
                         </p>
                       )}
                     </td>
 
-                    <td className="px-4 py-3.5 hidden sm:table-cell">
+                    <td className="px-4 py-3.5">
                       <span className="text-sm text-slate-300 font-body">
                         {expense.vendor === 'Unknown'
                           ? <span className="text-slate-600 italic">—</span>

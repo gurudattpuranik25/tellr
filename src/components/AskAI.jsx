@@ -68,7 +68,7 @@ export default function AskAI({ expenses }) {
         onClick={() => setShowTips(o => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-amber-500 hover:bg-amber-400 rounded-full shadow-xl shadow-amber-500/30 flex items-center justify-center transition-colors duration-200"
+        className="fixed bottom-24 right-4 sm:right-6 z-50 w-14 h-14 bg-amber-500 hover:bg-amber-400 rounded-full shadow-xl shadow-amber-500/30 flex items-center justify-center transition-colors duration-200"
         aria-label="Smart savings tips"
         title="Smart savings tips"
       >
@@ -80,7 +80,7 @@ export default function AskAI({ expenses }) {
         onClick={() => setIsOpen(o => !o)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-500 rounded-full shadow-xl shadow-blue-500/30 flex items-center justify-center transition-colors duration-200"
+        className="fixed bottom-6 right-4 sm:right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-500 rounded-full shadow-xl shadow-blue-500/30 flex items-center justify-center transition-colors duration-200"
         aria-label="Ask AI about expenses"
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -116,7 +116,7 @@ export default function AskAI({ expenses }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-            className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 glass-card flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-80 md:w-96 glass-card flex flex-col overflow-hidden"
             style={{ height: '460px', maxHeight: 'calc(100vh - 130px)' }}
           >
             {/* Header */}

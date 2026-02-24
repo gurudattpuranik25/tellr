@@ -279,7 +279,7 @@ export default function GroupDetail() {
                       if (e.key === 'Escape') setIsEditingName(false)
                     }}
                     autoFocus
-                    className="text-2xl font-heading font-bold text-white bg-transparent border-b-2 border-blue-500 focus:outline-none min-w-0 w-48 sm:w-64"
+                    className="text-2xl font-heading font-bold text-white bg-transparent border-b-2 border-blue-500 focus:outline-none min-w-0 w-full max-w-[200px] sm:max-w-[256px]"
                   />
                   <button
                     onClick={handleRename}

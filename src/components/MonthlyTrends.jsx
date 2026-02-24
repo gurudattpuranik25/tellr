@@ -150,7 +150,7 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={v => `₹${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
-                width={48}
+                width={42}
               />
               <Tooltip
                 content={<TrendTooltip />}

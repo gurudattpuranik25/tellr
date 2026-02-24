@@ -237,7 +237,7 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(v) => `₹${v}`}
-                  width={45}
+                  width={40}
                 />
                 <Tooltip content={<BarTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
                 <Bar dataKey="amount" fill="#3b82f6" radius={[4, 4, 0, 0]} opacity={0.8} />

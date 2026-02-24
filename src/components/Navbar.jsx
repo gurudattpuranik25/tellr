@@ -61,7 +61,7 @@ export default function Navbar() {
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    <span className="hidden xs:block">{label}</span>
+                    <span className="hidden sm:block">{label}</span>
                   </button>
                 )
               })}

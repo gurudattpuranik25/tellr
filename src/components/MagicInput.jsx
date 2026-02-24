@@ -188,7 +188,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 disabled={isBusy || disabled}
-                className="w-full bg-transparent text-white text-lg py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
+                className="w-full bg-transparent text-white text-base sm:text-lg py-3 sm:py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
                 placeholder={placeholder}
                 autoComplete="off"
                 autoCorrect="off"
