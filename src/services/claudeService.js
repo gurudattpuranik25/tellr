@@ -37,7 +37,10 @@ export async function parseExpense(text) {
 - description (brief 3-5 word summary of what was purchased)
 - date (ISO format YYYY-MM-DD, default to today ${today} if not specified)
 
-Respond ONLY in valid JSON format, no markdown, no explanation, no code blocks:
+If the input is NOT a recognizable expense — e.g. random gibberish, unrelated text, questions, or anything a human cannot interpret as a purchase or payment — respond ONLY with:
+{"error": "not_an_expense"}
+
+Otherwise respond ONLY in valid JSON format, no markdown, no explanation, no code blocks:
 {"amount": 250, "category": "Food & Dining", "vendor": "Swiggy", "description": "Lunch via Swiggy", "date": "${today}"}`
 
   const response = await client.messages.create({
@@ -52,6 +55,11 @@ Respond ONLY in valid JSON format, no markdown, no explanation, no code blocks:
   // Strip any accidental markdown code fences
   const cleaned = content.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
   const parsed = JSON.parse(cleaned)
+
+  // Reject unrecognizable input
+  if (parsed.error === 'not_an_expense') {
+    throw new Error('not_an_expense')
+  }
 
   // Validate required fields
   if (typeof parsed.amount !== 'number' || parsed.amount <= 0) {

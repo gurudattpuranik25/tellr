@@ -109,7 +109,9 @@ export default function Dashboard() {
       )
     } catch (err) {
       console.error('Parse error:', err)
-      if (err.message?.includes('JSON') || err.message?.includes('valid amount')) {
+      if (err.message === 'not_an_expense') {
+        toast.error("Can't understand that. Try something like \"Lunch 250\" or \"Netflix 649\".", { icon: '🤔', duration: 4000 })
+      } else if (err.message?.includes('JSON') || err.message?.includes('valid amount')) {
         toast.error("Couldn't understand that expense. Try being more specific.")
       } else if (err.message?.includes('API') || err.status === 401) {
         toast.error('API key error. Check your VITE_ANTHROPIC_API_KEY in .env')
