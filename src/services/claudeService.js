@@ -150,14 +150,14 @@ function buildExpenseSummary(expenses) {
   if (!expenses || expenses.length === 0) return 'No expenses recorded yet.'
 
   const total = expenses.reduce((s, e) => s + e.amount, 0)
+
   const byCategory = {}
   for (const e of expenses) {
     byCategory[e.category] = (byCategory[e.category] || 0) + e.amount
   }
-  const topCats = Object.entries(byCategory)
+  const catBreakdown = Object.entries(byCategory)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 5)
-    .map(([cat, amt]) => `  - ${cat}: ₹${amt.toLocaleString('en-IN')}`)
+    .map(([cat, amt]) => `  ${cat}: ₹${amt.toLocaleString('en-IN')}`)
     .join('\n')
 
   const thirtyDaysAgo = new Date()
@@ -168,10 +168,20 @@ function buildExpenseSummary(expenses) {
   })
   const recentTotal = recent.reduce((s, e) => s + e.amount, 0)
 
+  // Full transaction list so Claude can answer min/max/specific queries correctly
+  const txList = [...expenses]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(e => `  ₹${e.amount} | ${e.description} | ${e.category} | ${e.date}`)
+    .join('\n')
+
   return `Total all-time: ₹${total.toLocaleString('en-IN')} across ${expenses.length} transactions
 Last 30 days: ₹${recentTotal.toLocaleString('en-IN')} (${recent.length} transactions)
-Top spending categories (all-time):
-${topCats}`
+
+Category breakdown (all-time):
+${catBreakdown}
+
+All transactions (newest first):
+${txList}`
 }
 
 export async function askExpenses(chatMessages, expenses) {
