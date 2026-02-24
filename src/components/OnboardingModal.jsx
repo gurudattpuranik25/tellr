@@ -99,7 +99,7 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
                 </p>
                 <ul className="text-left space-y-2.5 mt-4">
                   {[
-                    'Type expenses naturally — Claude parses them instantly',
+                    'Type expenses naturally — parsed instantly',
                     'Set budgets per category and track your progress',
                     'Split bills with friends using shared groups',
                   ].map((item, i) => (

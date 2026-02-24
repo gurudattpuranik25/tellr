@@ -314,7 +314,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
               exit={{ opacity: 0, y: -5 }}
               className="text-center text-blue-400 text-sm mt-3 font-body"
             >
-              ✨ Claude is parsing your expense...
+              ✨ Parsing your expense...
             </motion.p>
           )}
           {isScanning && (
@@ -324,7 +324,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
               exit={{ opacity: 0, y: -5 }}
               className="text-center text-blue-400 text-sm mt-3 font-body"
             >
-              📷 Scanning receipt with Claude Vision...
+              📷 Scanning receipt...
             </motion.p>
           )}
         </AnimatePresence>
@@ -334,7 +334,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
           <p className="text-center text-slate-400 dark:text-slate-600 text-xs mt-3 font-body">
             Press <kbd className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-500 text-xs border border-slate-200 dark:border-slate-700">Enter</kbd> to add
             {onScanReceipt && <> • <Camera className="w-3 h-3 inline mb-0.5 mx-0.5" /> to scan a receipt</>}
-            {' '}• Claude auto-parses category, vendor &amp; date
+            {' '}• Auto-parses category, vendor &amp; date
           </p>
         )}
       </motion.div>

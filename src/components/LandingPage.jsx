@@ -120,7 +120,7 @@ function DemoAnimation() {
                   }}
                 >
                   <div className="w-3.5 h-3.5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-                  ✨ Claude is parsing...
+                  ✨ Parsing...
                 </div>
               </motion.div>
             )}
@@ -168,13 +168,6 @@ function DemoAnimation() {
             )}
           </AnimatePresence>
 
-          {/* Powered by badge */}
-          <div className="flex justify-center pt-1">
-            <span className="text-xs text-slate-400 dark:text-slate-600 font-body flex items-center gap-1.5">
-              <Zap className="w-3 h-3" />
-              Powered by Claude AI
-            </span>
-          </div>
         </div>
       </div>
     </motion.div>
@@ -241,7 +234,7 @@ export default function LandingPage() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-body mb-8"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Powered by Claude AI
+            AI-powered finance
           </motion.div>
 
           {/* Headline */}
@@ -339,9 +332,8 @@ export default function LandingPage() {
             <span className="text-slate-400 dark:text-slate-600 text-sm font-body">Tellr</span>
           </div>
           <span className="text-slate-300 dark:text-slate-700 text-sm">·</span>
-          <span className="text-slate-400 dark:text-slate-600 text-sm font-body flex items-center gap-1">
-            <Sparkles className="w-3 h-3" />
-            Powered by Claude AI
+          <span className="text-slate-400 dark:text-slate-600 text-sm font-body">
+            Gurudatt Puranik
           </span>
         </div>
       </footer>

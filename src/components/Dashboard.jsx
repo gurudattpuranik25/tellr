@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Sparkles, CalendarDays } from 'lucide-react'
+import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 import Navbar from './Navbar'
@@ -290,9 +290,8 @@ export default function Dashboard() {
           transition={{ delay: 0.8 }}
           className="flex justify-center py-4"
         >
-          <span className="text-slate-300 dark:text-slate-700 text-xs font-body flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3" />
-            Powered by Claude AI
+          <span className="text-slate-300 dark:text-slate-700 text-xs font-body">
+            Gurudatt Puranik
           </span>
         </motion.div>
       </div>

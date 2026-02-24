@@ -126,7 +126,7 @@ export default function AskAI({ expenses }) {
               </div>
               <div>
                 <p className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Ask your expenses</p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 font-body">Powered by Claude</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-body">AI-powered insights</p>
               </div>
             </div>
 
