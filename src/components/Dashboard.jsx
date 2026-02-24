@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Sparkles, CalendarDays } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -20,6 +20,8 @@ import SpendingNudges from './SpendingNudges'
 import RecurringExpenses from './RecurringExpenses'
 import { useRecurring } from '../hooks/useRecurring'
 import AskAI from './AskAI'
+import OnboardingModal from './OnboardingModal'
+import { getOnboardingStatus, markOnboardingComplete } from '../services/userService'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -74,6 +76,19 @@ export default function Dashboard() {
   const { budgets } = useBudgets(user?.uid)
   const { recurringIds, recurringGroups } = useRecurring(expenses)
   const [budgetManagerOpen, setBudgetManagerOpen] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+
+  useEffect(() => {
+    if (!user || loading) return
+    getOnboardingStatus(user.uid).then(completed => {
+      if (completed) return
+      if (expenses.length > 0) {
+        markOnboardingComplete(user.uid)
+        return
+      }
+      setShowOnboarding(true)
+    })
+  }, [user, loading, expenses])
 
   const now = new Date()
   const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
@@ -282,6 +297,15 @@ export default function Dashboard() {
 
       {/* Floating AI chat — rendered outside the padded container so it overlays correctly */}
       <AskAI expenses={expenses} />
+
+      {/* First-login onboarding modal */}
+      {showOnboarding && (
+        <OnboardingModal
+          user={user}
+          onAddExpense={handleAddExpense}
+          onComplete={() => setShowOnboarding(false)}
+        />
+      )}
     </div>
   )
 }

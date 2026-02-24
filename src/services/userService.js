@@ -1,4 +1,4 @@
-import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, setDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../config/firebase'
 
 export async function upsertUserProfile(user) {
@@ -11,6 +11,15 @@ export async function upsertUserProfile(user) {
     },
     { merge: true }
   )
+}
+
+export async function getOnboardingStatus(uid) {
+  const snap = await getDoc(doc(db, 'users', uid))
+  return snap.exists() ? snap.data().onboardingCompleted === true : false
+}
+
+export async function markOnboardingComplete(uid) {
+  await setDoc(doc(db, 'users', uid), { onboardingCompleted: true }, { merge: true })
 }
 
 export async function findUserByEmail(email) {
