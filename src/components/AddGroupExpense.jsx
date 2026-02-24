@@ -1,8 +1,13 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { X, Loader2, IndianRupee } from 'lucide-react'
+import { X, Loader2, IndianRupee, CalendarDays } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { addGroupExpense } from '../services/groupService'
+
+function todayISO() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 const CATEGORIES = [
   'Food & Dining', 'Groceries', 'Housing/Rent', 'Transport', 'Shopping',
@@ -21,6 +26,7 @@ const CATEGORY_EMOJIS = {
 export default function AddGroupExpense({ group, currentUser, onClose }) {
   const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
+  const [date, setDate] = useState(todayISO())
   const [category, setCategory] = useState('Food & Dining')
   const [paidBy, setPaidBy] = useState(currentUser.uid)
   const [splitMode, setSplitMode] = useState('equal') // 'equal' | 'custom'
@@ -104,8 +110,6 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
     }
 
     const paidByMember = members.find(m => m.uid === paidBy)
-    const d = new Date()
-    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
     setLoading(true)
     try {
@@ -116,7 +120,7 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
         paidBy,
         paidByName: paidByMember?.displayName || paidByMember?.email || 'Unknown',
         splits,
-        date: today,
+        date,
       })
       toast.success(`Added "${description.trim()}"`)
       onClose()
@@ -178,6 +182,21 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
               className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
             />
           </div>
+        </div>
+
+        {/* Date */}
+        <div>
+          <label className="text-xs text-slate-400 font-body mb-1.5 flex items-center gap-1.5">
+            <CalendarDays className="w-3.5 h-3.5" />
+            Date
+          </label>
+          <input
+            type="date"
+            value={date}
+            max={todayISO()}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/60 font-body [color-scheme:dark]"
+          />
         </div>
 
         {/* Category */}

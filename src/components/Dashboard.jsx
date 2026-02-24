@@ -84,10 +84,10 @@ export default function Dashboard() {
     setSelectedYear(year)
   }
 
-  const handleAddExpense = async (text) => {
+  const handleAddExpense = async (text, date) => {
     try {
       const parsed = await parseExpense(text)
-      await addExpense(user.uid, { ...parsed, text })
+      await addExpense(user.uid, { ...parsed, date: date ?? parsed.date, text })
       toast.success(
         `Added ${parsed.description} — ₹${parsed.amount.toFixed(2)}`,
         { icon: '✨', duration: 3500 }

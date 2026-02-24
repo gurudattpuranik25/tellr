@@ -1,6 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ArrowRight, Loader2, Camera } from 'lucide-react'
+import { Sparkles, ArrowRight, Loader2, Camera, CalendarDays, ChevronDown } from 'lucide-react'
+
+function todayISO() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function isToday(date) {
+  return date === todayISO()
+}
+
+function formatShort(date) {
+  return new Date(date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 
 const PLACEHOLDER_EXAMPLES = [
   'Spent 250 on lunch at Swiggy...',
@@ -53,6 +66,8 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
   const [isFocused, setIsFocused] = useState(false)
   const [isParsing, setIsParsing] = useState(false)
   const [isScanning, setIsScanning] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(todayISO())
+  const [showDatePicker, setShowDatePicker] = useState(false)
   const inputRef = useRef(null)
   const fileInputRef = useRef(null)
   const placeholder = useTypewriter(PLACEHOLDER_EXAMPLES)
@@ -64,8 +79,9 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
 
     setIsParsing(true)
     try {
-      await onSubmit(trimmed)
+      await onSubmit(trimmed, selectedDate)
       setValue('')
+      setSelectedDate(todayISO())
     } finally {
       setIsParsing(false)
       inputRef.current?.focus()
@@ -260,6 +276,34 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
             </div>
           </div>
         </form>
+
+        {/* Date chip */}
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <CalendarDays className="w-3.5 h-3.5 text-slate-500" />
+          <span className="text-xs text-slate-500 font-body">Adding for:</span>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowDatePicker(v => !v)}
+              className="text-xs text-blue-400 hover:text-blue-300 font-body flex items-center gap-1 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full"
+            >
+              {isToday(selectedDate) ? 'Today' : formatShort(selectedDate)}
+              <ChevronDown className="w-3 h-3" />
+            </button>
+            {showDatePicker && (
+              <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-10 bg-slate-900 border border-slate-700 rounded-xl p-2 shadow-xl">
+                <input
+                  type="date"
+                  value={selectedDate}
+                  max={todayISO()}
+                  onChange={e => { setSelectedDate(e.target.value); setShowDatePicker(false) }}
+                  className="bg-transparent text-white text-sm font-body focus:outline-none [color-scheme:dark]"
+                  autoFocus
+                />
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Status text */}
         <AnimatePresence>
