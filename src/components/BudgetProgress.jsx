@@ -64,12 +64,12 @@ export default function BudgetProgress({
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-slate-400" />
-          <h3 className="text-sm font-semibold font-heading text-slate-200">Budget Tracker</h3>
+          <Target className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+          <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Budget Tracker</h3>
         </div>
         <button
           onClick={onManage}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium font-heading text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700/60 hover:border-slate-600 transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium font-heading text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100/80 dark:bg-slate-800/60 hover:bg-slate-200/80 dark:hover:bg-slate-700/60 border border-slate-200 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200"
         >
           <Settings className="w-3.5 h-3.5" />
           Manage
@@ -78,7 +78,7 @@ export default function BudgetProgress({
 
       {!hasBudgets ? (
         <div className="flex flex-col items-center justify-center py-8 gap-3">
-          <p className="text-slate-500 text-sm font-body text-center">
+          <p className="text-slate-400 dark:text-slate-500 text-sm font-body text-center">
             No budgets set. Add monthly limits to track your spending.
           </p>
           <button
@@ -102,7 +102,7 @@ export default function BudgetProgress({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="text-sm">{CATEGORY_EMOJIS[category] || '📦'}</span>
-                    <span className="text-xs font-medium font-body text-slate-300 truncate">
+                    <span className="text-xs font-medium font-body text-slate-600 dark:text-slate-300 truncate">
                       {category}
                     </span>
                   </div>
@@ -112,14 +112,14 @@ export default function BudgetProgress({
                         {status.text}
                       </span>
                     )}
-                    <span className="text-xs font-semibold font-heading text-white tabular-nums">
+                    <span className="text-xs font-semibold font-heading text-slate-900 dark:text-white tabular-nums">
                       {pct.toFixed(0)}%
                     </span>
                   </div>
                 </div>
 
                 {/* Progress bar */}
-                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${displayPct}%` }}
@@ -130,7 +130,7 @@ export default function BudgetProgress({
 
                 {/* Spent / remaining */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-body tabular-nums">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 font-body tabular-nums">
                     ₹{spent.toLocaleString('en-IN')} of ₹{limit.toLocaleString('en-IN')}
                   </span>
                   <span className="text-xs font-body tabular-nums">
@@ -139,7 +139,7 @@ export default function BudgetProgress({
                         ₹{(spent - limit).toLocaleString('en-IN')} over
                       </span>
                     ) : (
-                      <span className="text-slate-500">
+                      <span className="text-slate-400 dark:text-slate-500">
                         ₹{remaining.toLocaleString('en-IN')} left
                       </span>
                     )}

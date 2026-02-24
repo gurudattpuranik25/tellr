@@ -66,38 +66,38 @@ function DemoAnimation() {
       className="w-full max-w-xl mx-auto"
     >
       {/* Phone/terminal mock */}
-      <div className="glass-card p-1.5 rounded-3xl border border-white/10 shadow-2xl shadow-blue-500/5">
+      <div className="glass-card p-1.5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-blue-500/5">
         {/* Title bar */}
-        <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-white/5">
+        <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-slate-100 dark:border-white/5">
           <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-          <span className="ml-2 text-xs text-slate-500 font-body">Tellr — dashboard</span>
+          <span className="ml-2 text-xs text-slate-400 dark:text-slate-500 font-body">Tellr — dashboard</span>
         </div>
 
         <div className="p-4 space-y-4">
           {/* Input field */}
           <div className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition-all duration-300 ${
             phase === 'typing' || phase === 'parsing'
-              ? 'border-blue-500/60 bg-slate-900/80'
-              : 'border-slate-700/60 bg-slate-900/40'
+              ? 'border-blue-500/60 bg-slate-50 dark:bg-slate-900/80'
+              : 'border-slate-200 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/40'
           }`}
           style={phase === 'typing' || phase === 'parsing' ? {
             boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)'
           } : {}}
           >
             <Sparkles className={`w-4 h-4 flex-shrink-0 transition-colors duration-300 ${
-              phase === 'typing' ? 'text-blue-400' : 'text-slate-600'
+              phase === 'typing' ? 'text-blue-400' : 'text-slate-400 dark:text-slate-600'
             }`} />
             <span className="text-sm font-body flex-1 min-h-[20px]">
               {typedText ? (
-                <span className="text-white">{typedText}
+                <span className="text-slate-900 dark:text-white">{typedText}
                   {phase === 'typing' && (
                     <span className="cursor-blink text-blue-400">|</span>
                   )}
                 </span>
               ) : (
-                <span className="text-slate-600">Type an expense...</span>
+                <span className="text-slate-400 dark:text-slate-600">Type an expense...</span>
               )}
             </span>
           </div>
@@ -145,23 +145,23 @@ function DemoAnimation() {
                   />
                   <div className="px-4 py-3 grid grid-cols-4 gap-2 text-xs font-body">
                     <div>
-                      <p className="text-slate-600 mb-0.5">Date</p>
-                      <p className="text-slate-300">{DEMO_RESULT.date}</p>
+                      <p className="text-slate-400 dark:text-slate-600 mb-0.5">Date</p>
+                      <p className="text-slate-600 dark:text-slate-300">{DEMO_RESULT.date}</p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-slate-600 mb-0.5">Description</p>
-                      <p className="text-white truncate">{DEMO_RESULT.description}</p>
+                      <p className="text-slate-400 dark:text-slate-600 mb-0.5">Description</p>
+                      <p className="text-slate-900 dark:text-white truncate">{DEMO_RESULT.description}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-slate-600 mb-0.5">Amount</p>
-                      <p className="text-white font-semibold font-heading">{DEMO_RESULT.amount}</p>
+                      <p className="text-slate-400 dark:text-slate-600 mb-0.5">Amount</p>
+                      <p className="text-slate-900 dark:text-white font-semibold font-heading">{DEMO_RESULT.amount}</p>
                     </div>
                   </div>
                   <div className="px-4 pb-3 flex items-center justify-between">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${DEMO_RESULT.category.bg} ${DEMO_RESULT.category.text} ${DEMO_RESULT.category.border}`}>
                       {DEMO_RESULT.category.label}
                     </span>
-                    <span className="text-xs text-slate-500 font-body">{DEMO_RESULT.vendor}</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500 font-body">{DEMO_RESULT.vendor}</span>
                   </div>
                 </div>
               </motion.div>
@@ -170,7 +170,7 @@ function DemoAnimation() {
 
           {/* Powered by badge */}
           <div className="flex justify-center pt-1">
-            <span className="text-xs text-slate-600 font-body flex items-center gap-1.5">
+            <span className="text-xs text-slate-400 dark:text-slate-600 font-body flex items-center gap-1.5">
               <Zap className="w-3 h-3" />
               Powered by Claude AI
             </span>
@@ -197,7 +197,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-slate-950 flex flex-col overflow-hidden">
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-600/8 rounded-full blur-3xl -translate-y-1/2" />
@@ -216,7 +216,7 @@ export default function LandingPage() {
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30">
             <Zap className="w-4 h-4 text-white" />
           </div>
-          <span className="text-lg font-heading font-bold text-white">Tellr</span>
+          <span className="text-lg font-heading font-bold text-slate-900 dark:text-white">Tellr</span>
         </motion.div>
 
         <motion.button
@@ -224,7 +224,7 @@ export default function LandingPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           onClick={handleSignIn}
-          className="text-sm text-slate-400 hover:text-white transition-colors duration-200 font-body"
+          className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-200 font-body"
         >
           Sign in
         </motion.button>
@@ -249,7 +249,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.05] tracking-tight mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-slate-900 dark:text-white leading-[1.05] tracking-tight mb-6"
           >
             Track money like you
             <br />
@@ -261,7 +261,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-slate-400 font-body max-w-xl mx-auto mb-10 text-balance"
+            className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-body max-w-xl mx-auto mb-10 text-balance"
           >
             No forms. No dropdowns. Just type how you spent money in plain English
             and let AI handle the rest.
@@ -300,7 +300,7 @@ export default function LandingPage() {
               )}
             </motion.button>
 
-            <p className="text-slate-500 text-sm font-body">
+            <p className="text-slate-400 dark:text-slate-500 text-sm font-body">
               No credit card required
             </p>
           </motion.div>
@@ -324,7 +324,7 @@ export default function LandingPage() {
                 className="flex items-center gap-2.5 text-left"
               >
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                <span className="text-sm text-slate-400 font-body">{feature}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 font-body">{feature}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -332,14 +332,14 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 py-6 text-center border-t border-white/5">
+      <footer className="relative z-10 py-6 text-center border-t border-slate-100 dark:border-white/5">
         <div className="flex items-center justify-center gap-4">
           <div className="flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-slate-600 text-sm font-body">Tellr</span>
+            <Zap className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
+            <span className="text-slate-400 dark:text-slate-600 text-sm font-body">Tellr</span>
           </div>
-          <span className="text-slate-700 text-sm">·</span>
-          <span className="text-slate-600 text-sm font-body flex items-center gap-1">
+          <span className="text-slate-300 dark:text-slate-700 text-sm">·</span>
+          <span className="text-slate-400 dark:text-slate-600 text-sm font-body flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             Powered by Claude AI
           </span>

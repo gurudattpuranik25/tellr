@@ -13,6 +13,7 @@ import {
   CartesianGrid,
 } from 'recharts'
 import { PieChart as PieIcon, BarChart2 } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 
 const CATEGORY_COLORS = {
   'Food & Dining':  '#f97316',
@@ -48,9 +49,9 @@ const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null
   const d = payload[0]
   return (
-    <div className="bg-slate-900/95 border border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
-      <p className="text-white font-semibold font-heading">{d.name}</p>
-      <p className="text-slate-300 font-body">₹{Number(d.value).toFixed(2)}</p>
+    <div className="bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
+      <p className="text-slate-900 dark:text-white font-semibold font-heading">{d.name}</p>
+      <p className="text-slate-600 dark:text-slate-300 font-body">₹{Number(d.value).toFixed(2)}</p>
     </div>
   )
 }
@@ -58,14 +59,19 @@ const CustomTooltip = ({ active, payload }) => {
 const BarTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-slate-900/95 border border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
-      <p className="text-slate-400 text-xs font-body">{label}</p>
-      <p className="text-white font-semibold font-heading">₹{Number(payload[0]?.value || 0).toFixed(2)}</p>
+    <div className="bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
+      <p className="text-slate-500 dark:text-slate-400 text-xs font-body">{label}</p>
+      <p className="text-slate-900 dark:text-white font-semibold font-heading">₹{Number(payload[0]?.value || 0).toFixed(2)}</p>
     </div>
   )
 }
 
 export default function Charts({ expenses, selectedMonth, selectedYear }) {
+  const { isDark } = useTheme()
+  const axisColor  = isDark ? '#64748b' : '#94a3b8'
+  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)'
+  const cursorColor = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'
+
   const { categoryData, dailyData } = useMemo(() => {
     const now = new Date()
     const month = selectedMonth ?? now.getMonth()
@@ -126,15 +132,15 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
         className="glass-card p-5"
       >
         <div className="flex items-center gap-2 mb-5">
-          <PieIcon className="w-4 h-4 text-slate-400" />
-          <h3 className="text-sm font-semibold font-heading text-slate-200">
+          <PieIcon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+          <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">
             Spending by Category
           </h3>
         </div>
 
         {!hasData ? (
           <div className="h-52 flex items-center justify-center">
-            <p className="text-slate-600 text-sm font-body">No data for this period</p>
+            <p className="text-slate-400 dark:text-slate-600 text-sm font-body">No data for this period</p>
           </div>
         ) : (
           <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -176,13 +182,13 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
                         className="w-2 h-2 rounded-full flex-shrink-0"
                         style={{ backgroundColor: CATEGORY_COLORS[entry.name] || '#64748b' }}
                       />
-                      <span className="text-xs text-slate-400 font-body truncate">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-body truncate">
                         {CATEGORY_EMOJIS[entry.name]} {entry.name}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-xs text-slate-600 font-body">{pct}%</span>
-                      <span className="text-xs font-medium text-white font-heading">
+                      <span className="text-xs text-slate-400 dark:text-slate-600 font-body">{pct}%</span>
+                      <span className="text-xs font-medium text-slate-900 dark:text-white font-heading">
                         ₹{entry.value.toFixed(2)}
                       </span>
                     </div>
@@ -190,7 +196,7 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
                 )
               })}
               {categoryData.length > 8 && (
-                <p className="text-xs text-slate-600 font-body pt-1">
+                <p className="text-xs text-slate-400 dark:text-slate-600 font-body pt-1">
                   +{categoryData.length - 8} more categories
                 </p>
               )}
@@ -207,15 +213,15 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
         className="glass-card p-5"
       >
         <div className="flex items-center gap-2 mb-5">
-          <BarChart2 className="w-4 h-4 text-slate-400" />
-          <h3 className="text-sm font-semibold font-heading text-slate-200">
+          <BarChart2 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+          <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">
             Daily Spending — Last 7 Days
           </h3>
         </div>
 
         {!hasDailyData ? (
           <div className="h-52 flex items-center justify-center">
-            <p className="text-slate-600 text-sm font-body">No spending in the last 7 days</p>
+            <p className="text-slate-400 dark:text-slate-600 text-sm font-body">No spending in the last 7 days</p>
           </div>
         ) : (
           <div className="h-52">
@@ -223,23 +229,23 @@ export default function Charts({ expenses, selectedMonth, selectedYear }) {
               <BarChart data={dailyData} barCategoryGap="30%">
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke={gridColor}
                   vertical={false}
                 />
                 <XAxis
                   dataKey="day"
-                  tick={{ fill: '#64748b', fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
+                  tick={{ fill: axisColor, fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: '#64748b', fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
+                  tick={{ fill: axisColor, fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(v) => `₹${v}`}
                   width={40}
                 />
-                <Tooltip content={<BarTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                <Tooltip content={<BarTooltip />} cursor={{ fill: cursorColor }} />
                 <Bar dataKey="amount" fill="#3b82f6" radius={[4, 4, 0, 0]} opacity={0.8} />
               </BarChart>
             </ResponsiveContainer>

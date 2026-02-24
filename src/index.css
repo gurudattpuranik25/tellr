@@ -12,11 +12,16 @@
   }
 
   body {
-    @apply bg-slate-950 text-white font-body antialiased;
+    @apply bg-white text-slate-900 font-body antialiased;
+    min-height: 100vh;
+  }
+
+  .dark body {
+    color: #ffffff;
+    background-color: #020617;
     background-image:
       radial-gradient(ellipse at top, rgba(30, 58, 138, 0.15) 0%, transparent 60%),
       radial-gradient(ellipse at bottom right, rgba(88, 28, 135, 0.1) 0%, transparent 50%);
-    min-height: 100vh;
   }
 
   ::-webkit-scrollbar {
@@ -25,15 +30,28 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-slate-900;
+    @apply bg-slate-100;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background-color: #0f172a;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full;
+    @apply bg-slate-300 rounded-full;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-600;
+    @apply bg-slate-400;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #475569;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -43,11 +61,11 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+    @apply bg-white border border-slate-200 shadow-sm rounded-2xl;
   }
 
   .glass-card-hover {
-    @apply glass-card hover:bg-white/8 hover:border-white/20 transition-all duration-300;
+    @apply glass-card hover:border-slate-300 hover:shadow-md transition-all duration-300;
   }
 
   .btn-primary {
@@ -57,13 +75,13 @@
   }
 
   .btn-ghost {
-    @apply bg-white/5 hover:bg-white/10 text-white border border-white/10
-           hover:border-white/20 font-medium px-4 py-2 rounded-lg
+    @apply bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200
+           hover:border-slate-300 font-medium px-4 py-2 rounded-lg
            transition-all duration-200 active:scale-95;
   }
 
   .input-magic {
-    @apply w-full bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500
+    @apply w-full bg-white border border-slate-300 text-slate-900 placeholder-slate-400
            rounded-2xl px-6 py-4 text-lg font-body
            focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
            transition-all duration-300;
@@ -119,6 +137,41 @@
   .glow-blue-sm {
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
   }
+}
+
+/* Dark mode overrides for CSS utility classes */
+.dark .glass-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+.dark .glass-card-hover:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .btn-ghost {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .input-magic {
+  background-color: rgba(15, 23, 42, 0.8);
+  border-color: #334155;
+  color: #ffffff;
+}
+
+.dark .input-magic::placeholder {
+  color: #64748b;
 }
 
 /* Custom animations */

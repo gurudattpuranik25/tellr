@@ -149,44 +149,44 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold font-heading text-white">Add Expense</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 transition-colors">
+          <h2 className="text-base font-semibold font-heading text-slate-900 dark:text-white">Add Expense</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Description */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">What was it for?</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">What was it for?</label>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Dinner, Uber, Groceries..."
             autoFocus
-            className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
+            className="w-full bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
           />
         </div>
 
         {/* Amount */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">Total amount</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">Total amount</label>
           <div className="relative">
-            <IndianRupee className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <IndianRupee className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0"
               min="0"
-              className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
+              className="w-full bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
             />
           </div>
         </div>
 
         {/* Date */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 flex items-center gap-1.5">
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 flex items-center gap-1.5">
             <CalendarDays className="w-3.5 h-3.5" />
             Date
           </label>
@@ -195,20 +195,20 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
             value={date}
             max={todayISO()}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/60 font-body [color-scheme:dark]"
+            className="w-full bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500/60 font-body [color-scheme:light] dark:[color-scheme:dark]"
           />
         </div>
 
         {/* Category */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">Category</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">Category</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/60 font-body appearance-none"
+            className="w-full bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500/60 font-body appearance-none"
           >
             {CATEGORIES.map((c) => (
-              <option key={c} value={c} style={{ background: '#0f172a' }}>
+              <option key={c} value={c}>
                 {CATEGORY_EMOJIS[c]} {c}
               </option>
             ))}
@@ -217,7 +217,7 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
 
         {/* Who paid */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">Who paid?</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">Who paid?</label>
           <div className="flex flex-wrap gap-2">
             {members.map((m) => (
               <button
@@ -226,7 +226,7 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium font-body border transition-all duration-200 ${
                   paidBy === m.uid
                     ? 'bg-blue-600/20 border-blue-500/50 text-blue-300'
-                    : 'bg-slate-800/60 border-slate-700/40 text-slate-400 hover:border-slate-600'
+                    : 'bg-slate-100/60 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/40 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
                 }`}
               >
                 {m.displayName || m.email}
@@ -239,8 +239,8 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
         <div>
           {/* Mode toggle */}
           <div className="flex items-center justify-between mb-3">
-            <label className="text-xs text-slate-400 font-body">Split</label>
-            <div className="flex items-center gap-0.5 bg-slate-800/60 border border-slate-700/50 rounded-lg p-0.5">
+            <label className="text-xs text-slate-500 dark:text-slate-400 font-body">Split</label>
+            <div className="flex items-center gap-0.5 bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-lg p-0.5">
               {['equal', 'custom'].map(mode => (
                 <button
                   key={mode}
@@ -248,7 +248,7 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
                   className={`px-3 py-1 rounded-md text-xs font-medium font-body transition-all capitalize ${
                     splitMode === mode
                       ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30'
-                      : 'text-slate-500 hover:text-slate-300'
+                      : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}
                 >
                   {mode}
@@ -268,28 +268,28 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
                     onClick={() => toggleExclude(m.uid)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl border text-left transition-all duration-150 ${
                       excluded
-                        ? 'bg-slate-800/20 border-slate-700/20 opacity-40'
-                        : 'bg-slate-800/40 border-slate-700/40 hover:border-slate-600/60'
+                        ? 'bg-slate-100/20 dark:bg-slate-800/20 border-slate-200/20 dark:border-slate-700/20 opacity-40'
+                        : 'bg-slate-100/40 dark:bg-slate-800/40 border-slate-200/40 dark:border-slate-700/40 hover:border-slate-300/60 dark:hover:border-slate-600/60'
                     }`}
                   >
                     {/* Checkbox */}
                     <div className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all ${
-                      !excluded ? 'bg-blue-600 border-blue-500' : 'bg-transparent border-slate-600'
+                      !excluded ? 'bg-blue-600 border-blue-500' : 'bg-transparent border-slate-300 dark:border-slate-600'
                     }`}>
                       {!excluded && <span className="text-white text-[9px] font-bold leading-none">✓</span>}
                     </div>
-                    <span className="flex-1 text-xs text-slate-300 font-body truncate">
+                    <span className="flex-1 text-xs text-slate-600 dark:text-slate-300 font-body truncate">
                       {m.displayName || m.email}
                       {m.uid === paidBy && <span className="text-blue-400 ml-1.5 font-medium">paid</span>}
                     </span>
-                    <span className={`text-xs font-heading tabular-nums flex-shrink-0 ${excluded ? 'text-slate-600' : 'text-slate-300'}`}>
+                    <span className={`text-xs font-heading tabular-nums flex-shrink-0 ${excluded ? 'text-slate-400 dark:text-slate-600' : 'text-slate-500 dark:text-slate-300'}`}>
                       {excluded || parsedAmount <= 0 ? '—' : `₹${equalEach}`}
                     </span>
                   </button>
                 )
               })}
               {parsedAmount > 0 && includedMembers.length > 0 && (
-                <p className="text-xs text-slate-600 font-body text-right pt-0.5">
+                <p className="text-xs text-slate-400 dark:text-slate-600 font-body text-right pt-0.5">
                   ₹{equalEach} × {includedMembers.length}{includedMembers.length !== members.length ? ` of ${members.length}` : ''} people
                 </p>
               )}
@@ -300,20 +300,20 @@ export default function AddGroupExpense({ group, currentUser, onClose }) {
           {splitMode === 'custom' && (
             <div className="space-y-1.5">
               {members.map((m) => (
-                <div key={m.uid} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-800/40 border border-slate-700/40">
-                  <span className="flex-1 text-xs text-slate-300 font-body truncate">
+                <div key={m.uid} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-100/40 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/40">
+                  <span className="flex-1 text-xs text-slate-600 dark:text-slate-300 font-body truncate">
                     {m.displayName || m.email}
                     {m.uid === paidBy && <span className="text-blue-400 ml-1.5 font-medium">paid</span>}
                   </span>
                   <div className="relative flex-shrink-0">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[11px]">₹</span>
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[11px]">₹</span>
                     <input
                       type="number"
                       min="0"
                       value={customAmounts[m.uid] || ''}
                       onChange={(e) => setCustomAmounts(prev => ({ ...prev, [m.uid]: e.target.value }))}
                       placeholder="0"
-                      className="w-24 bg-slate-900/60 border border-slate-700 rounded-lg pl-6 pr-2 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 font-heading tabular-nums"
+                      className="w-24 bg-white/60 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-700 rounded-lg pl-6 pr-2 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-blue-500/50 font-heading tabular-nums"
                     />
                   </div>
                 </div>

@@ -113,7 +113,7 @@ export default function SpendingNudges({ expenses, selectedMonth, selectedYear }
     >
       <div className="flex items-center gap-2 mb-4">
         <Lightbulb className="w-4 h-4 text-amber-400" />
-        <h3 className="text-sm font-semibold font-heading text-slate-200">Spending Insights</h3>
+        <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Spending Insights</h3>
       </div>
 
       <div className="space-y-2">
@@ -148,7 +148,7 @@ export default function SpendingNudges({ expenses, selectedMonth, selectedYear }
                   <span className="text-base flex-shrink-0">{emoji}</span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-medium font-body text-slate-200">
+                      <span className="text-sm font-medium font-body text-slate-700 dark:text-slate-200">
                         {label}
                       </span>
                       <span className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full font-medium ${colorConfig.badge}`}>
@@ -164,7 +164,7 @@ export default function SpendingNudges({ expenses, selectedMonth, selectedYear }
 
                 <button
                   onClick={() => setDismissed(d => new Set([...d, category]))}
-                  className="p-1 rounded-lg text-slate-600 hover:text-slate-400 transition-colors flex-shrink-0"
+                  className="p-1 rounded-lg text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400 transition-colors flex-shrink-0"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>

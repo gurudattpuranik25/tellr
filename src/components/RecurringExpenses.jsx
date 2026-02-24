@@ -45,12 +45,12 @@ export default function RecurringExpenses({ recurringGroups }) {
     >
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <Repeat className="w-4 h-4 text-slate-400" />
-          <h3 className="text-sm font-semibold font-heading text-slate-200">Recurring Expenses</h3>
+          <Repeat className="w-4 h-4 text-slate-400 dark:text-slate-400" />
+          <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Recurring Expenses</h3>
         </div>
         <div className="glass-card px-3 py-1.5 flex items-center gap-2">
-          <span className="text-xs text-slate-400 font-body">Est. monthly</span>
-          <span className="text-sm font-semibold font-heading text-white">
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-body">Est. monthly</span>
+          <span className="text-sm font-semibold font-heading text-slate-900 dark:text-white">
             ₹{totalMonthly.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
           </span>
         </div>
@@ -68,7 +68,7 @@ export default function RecurringExpenses({ recurringGroups }) {
               className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border transition-colors ${
                 dueSoon
                   ? 'bg-amber-500/5 border-amber-500/25 hover:border-amber-500/40'
-                  : 'bg-slate-800/40 border-slate-700/40 hover:border-slate-600/40'
+                  : 'bg-slate-100/40 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/40 hover:border-slate-300 dark:hover:border-slate-600/40'
               }`}
             >
               <div className="flex items-center gap-2 min-w-0">
@@ -77,7 +77,7 @@ export default function RecurringExpenses({ recurringGroups }) {
                 </span>
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <p className="text-sm font-medium text-slate-200 font-body truncate">
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200 font-body truncate">
                       {capitalize(group.name)}
                     </p>
                     {dueSoon && (
@@ -87,26 +87,26 @@ export default function RecurringExpenses({ recurringGroups }) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 font-body">
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-body">
                     {group.monthCount} month{group.monthCount > 1 ? 's' : ''} detected
                     {group.typicalDay && (
-                      <span className="text-slate-600"> · ~{ordinal(group.typicalDay)}</span>
+                      <span className="text-slate-400 dark:text-slate-600"> · ~{ordinal(group.typicalDay)}</span>
                     )}
                   </p>
                 </div>
               </div>
               <div className="flex-shrink-0 text-right">
-                <p className="text-sm font-semibold font-heading text-white tabular-nums">
+                <p className="text-sm font-semibold font-heading text-slate-900 dark:text-white tabular-nums">
                   ₹{group.avgAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                 </p>
-                <p className="text-xs text-slate-600 font-body">/month</p>
+                <p className="text-xs text-slate-400 dark:text-slate-600 font-body">/month</p>
               </div>
             </motion.div>
           )
         })}
       </div>
 
-      <p className="mt-4 text-xs text-slate-600 font-body">
+      <p className="mt-4 text-xs text-slate-400 dark:text-slate-600 font-body">
         Detected from expenses appearing in 2+ months with consistent amounts.
       </p>
     </motion.div>

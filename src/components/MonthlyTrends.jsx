@@ -10,15 +10,16 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 
 const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 const TrendTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-slate-900/95 border border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
-      <p className="text-slate-400 text-xs font-body">{label}</p>
-      <p className="text-white font-semibold font-heading">
+    <div className="bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2.5 shadow-xl backdrop-blur text-sm">
+      <p className="text-slate-500 dark:text-slate-400 text-xs font-body">{label}</p>
+      <p className="text-slate-900 dark:text-white font-semibold font-heading">
         ₹{Number(payload[0]?.value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
       </p>
     </div>
@@ -26,6 +27,11 @@ const TrendTooltip = ({ active, payload, label }) => {
 }
 
 export default function MonthlyTrends({ expenses, selectedMonth, selectedYear }) {
+  const { isDark } = useTheme()
+  const axisColor  = isDark ? '#64748b' : '#94a3b8'
+  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)'
+  const cursorColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)'
+
   const { monthlyData, current, prev, pct, dir } = useMemo(() => {
     const now = new Date()
     const selMonth = selectedMonth ?? now.getMonth()
@@ -87,8 +93,8 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
     },
     neutral: {
       Icon: Minus,
-      color: 'text-slate-400',
-      bg: 'bg-slate-800/40 border-slate-700/40',
+      color: 'text-slate-500 dark:text-slate-400',
+      bg: 'bg-slate-100 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/40',
       label: 'Similar to last month',
     },
   }[dir]
@@ -105,8 +111,8 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-slate-400" />
-          <h3 className="text-sm font-semibold font-heading text-slate-200">
+          <TrendingUp className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+          <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">
             Monthly Spending Trend
           </h3>
         </div>
@@ -122,7 +128,7 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
       {/* Chart */}
       {!hasData ? (
         <div className="h-48 flex items-center justify-center">
-          <p className="text-slate-600 text-sm font-body">No spending data yet</p>
+          <p className="text-slate-400 dark:text-slate-600 text-sm font-body">No spending data yet</p>
         </div>
       ) : (
         <div className="h-48">
@@ -136,17 +142,17 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
               </defs>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="rgba(255,255,255,0.04)"
+                stroke={gridColor}
                 vertical={false}
               />
               <XAxis
                 dataKey="label"
-                tick={{ fill: '#64748b', fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
+                tick={{ fill: axisColor, fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: '#64748b', fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
+                tick={{ fill: axisColor, fontSize: 10, fontFamily: '"DM Sans", sans-serif' }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={v => `₹${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
@@ -154,7 +160,7 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
               />
               <Tooltip
                 content={<TrendTooltip />}
-                cursor={{ stroke: 'rgba(255,255,255,0.06)', strokeWidth: 1 }}
+                cursor={{ stroke: cursorColor, strokeWidth: 1 }}
               />
               <Area
                 type="monotone"
@@ -183,21 +189,21 @@ export default function MonthlyTrends({ expenses, selectedMonth, selectedYear })
 
       {/* Previous vs current comparison */}
       {(prev > 0 || current > 0) && (
-        <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs text-slate-500 font-body mb-0.5">
+            <p className="text-xs text-slate-400 dark:text-slate-500 font-body mb-0.5">
               {monthlyData[4]?.label}
             </p>
-            <p className="text-lg font-semibold font-heading text-slate-300">
+            <p className="text-lg font-semibold font-heading text-slate-600 dark:text-slate-300">
               ₹{prev.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500 font-body mb-0.5">
+            <p className="text-xs text-slate-400 dark:text-slate-500 font-body mb-0.5">
               {monthlyData[5]?.label}{' '}
               <span className="text-blue-500">(selected)</span>
             </p>
-            <p className="text-lg font-semibold font-heading text-white">
+            <p className="text-lg font-semibold font-heading text-slate-900 dark:text-white">
               ₹{current.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>

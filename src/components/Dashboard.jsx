@@ -44,17 +44,17 @@ function MonthSelector({ selectedMonth, selectedYear, onChange }) {
   }
 
   return (
-    <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700/60 rounded-xl px-1 py-1">
+    <div className="flex items-center gap-1 bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/60 rounded-xl px-1 py-1">
       <button
         onClick={prev}
-        className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors duration-200"
+        className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors duration-200"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
 
       <div className="flex items-center gap-1.5 px-3 min-w-[160px] justify-center">
-        <CalendarDays className="w-3.5 h-3.5 text-slate-500" />
-        <span className="text-sm font-medium font-heading text-slate-200 whitespace-nowrap">
+        <CalendarDays className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+        <span className="text-sm font-medium font-heading text-slate-700 dark:text-slate-200 whitespace-nowrap">
           {MONTH_NAMES[selectedMonth]} {selectedYear}
         </span>
       </div>
@@ -62,7 +62,7 @@ function MonthSelector({ selectedMonth, selectedYear, onChange }) {
       <button
         onClick={next}
         disabled={isCurrentMonth}
-        className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+        className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
       >
         <ChevronRight className="w-4 h-4" />
       </button>
@@ -164,7 +164,7 @@ export default function Dashboard() {
   }, [expenses, selectedMonth, selectedYear])
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-3xl" />
@@ -183,13 +183,13 @@ export default function Dashboard() {
           className="text-center space-y-6"
         >
           <div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-white">
               {getGreeting()},{' '}
               <span className="gradient-text">
                 {user?.displayName?.split(' ')[0] || 'there'}
               </span>
             </h2>
-            <p className="text-slate-500 text-sm mt-1 font-body">
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-1 font-body">
               What did you spend on today?
             </p>
           </div>
@@ -214,10 +214,10 @@ export default function Dashboard() {
               animate={{ opacity: 1 }}
               className="glass-card px-4 py-2 flex items-center gap-2"
             >
-              <span className="text-slate-400 text-sm font-body">
+              <span className="text-slate-500 dark:text-slate-400 text-sm font-body">
                 {MONTH_NAMES[selectedMonth]} total:
               </span>
-              <span className="text-white font-semibold font-heading">
+              <span className="text-slate-900 dark:text-white font-semibold font-heading">
                 ₹{monthTotal.toFixed(2)}
               </span>
             </motion.div>
@@ -290,7 +290,7 @@ export default function Dashboard() {
           transition={{ delay: 0.8 }}
           className="flex justify-center py-4"
         >
-          <span className="text-slate-700 text-xs font-body flex items-center gap-1.5">
+          <span className="text-slate-300 dark:text-slate-700 text-xs font-body flex items-center gap-1.5">
             <Sparkles className="w-3 h-3" />
             Powered by Claude AI
           </span>

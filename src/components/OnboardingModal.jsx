@@ -76,11 +76,11 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
             <div
               key={n}
               className={`h-2 rounded-full transition-all duration-300 ${
-                n <= step ? 'bg-blue-500 w-6' : 'bg-slate-700 w-2'
+                n <= step ? 'bg-blue-500 w-6' : 'bg-slate-300 dark:bg-slate-700 w-2'
               }`}
             />
           ))}
-          <span className="text-slate-500 text-xs font-body ml-2">Step {step} of 4</span>
+          <span className="text-slate-400 dark:text-slate-500 text-xs font-body ml-2">Step {step} of 4</span>
         </div>
 
         {/* Step content */}
@@ -91,10 +91,10 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
                 <div className="w-14 h-14 rounded-2xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center mx-auto">
                   <Sparkles className="w-7 h-7 text-blue-400" />
                 </div>
-                <h2 className="text-2xl font-heading font-bold text-white">
+                <h2 className="text-2xl font-heading font-bold text-slate-900 dark:text-white">
                   Welcome to Tellr 👋
                 </h2>
-                <p className="text-slate-400 font-body text-sm leading-relaxed">
+                <p className="text-slate-500 dark:text-slate-400 font-body text-sm leading-relaxed">
                   The AI-powered expense tracker that understands plain English.
                 </p>
                 <ul className="text-left space-y-2.5 mt-4">
@@ -103,7 +103,7 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
                     'Set budgets per category and track your progress',
                     'Split bills with friends using shared groups',
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-slate-300 text-sm font-body">
+                    <li key={i} className="flex items-start gap-2.5 text-slate-600 dark:text-slate-300 text-sm font-body">
                       <CheckCircle2 className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
                       {item}
                     </li>
@@ -123,9 +123,9 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Wallet className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-lg font-heading font-bold text-white">Add your first expense</h2>
+                  <h2 className="text-lg font-heading font-bold text-slate-900 dark:text-white">Add your first expense</h2>
                 </div>
-                <p className="text-slate-400 font-body text-sm">
+                <p className="text-slate-500 dark:text-slate-400 font-body text-sm">
                   Just type naturally — e.g. "Lunch at Swiggy 350"
                 </p>
                 <MagicInput onSubmit={handleExpense} />
@@ -155,30 +155,30 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Wallet className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-lg font-heading font-bold text-white">Set a budget</h2>
+                  <h2 className="text-lg font-heading font-bold text-slate-900 dark:text-white">Set a budget</h2>
                 </div>
-                <p className="text-slate-400 font-body text-sm">
+                <p className="text-slate-500 dark:text-slate-400 font-body text-sm">
                   Choose a category and set your monthly limit.
                 </p>
                 <div className="space-y-3">
                   <select
                     value={budgetCategory}
                     onChange={e => setBudgetCategory(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full bg-white/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors"
                   >
                     {CATEGORIES.map(c => (
                       <option key={c} value={c}>{c}</option>
                     ))}
                   </select>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-body">₹</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 text-sm font-body">₹</span>
                     <input
                       type="number"
                       min="1"
                       placeholder="Amount"
                       value={budgetAmount}
                       onChange={e => setBudgetAmount(e.target.value)}
-                      className="w-full bg-slate-800/80 border border-slate-700 rounded-xl pl-7 pr-3 py-2.5 text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors placeholder-slate-600"
+                      className="w-full bg-white/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl pl-7 pr-3 py-2.5 text-slate-900 dark:text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors placeholder-slate-400 dark:placeholder-slate-600"
                     />
                   </div>
                 </div>
@@ -197,9 +197,9 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-lg font-heading font-bold text-white">Create a group</h2>
+                  <h2 className="text-lg font-heading font-bold text-slate-900 dark:text-white">Create a group</h2>
                 </div>
-                <p className="text-slate-400 font-body text-sm">
+                <p className="text-slate-500 dark:text-slate-400 font-body text-sm">
                   Split expenses with friends, roommates, or colleagues.
                 </p>
                 <input
@@ -207,14 +207,14 @@ export default function OnboardingModal({ user, onAddExpense, onComplete }) {
                   placeholder="e.g. Roommates, Goa Trip, Office Lunches"
                   value={groupName}
                   onChange={e => setGroupName(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors placeholder-slate-600"
+                  className="w-full bg-white/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm font-body focus:outline-none focus:border-blue-500 transition-colors placeholder-slate-400 dark:placeholder-slate-600"
                 />
               </div>
               <div className="flex items-center justify-between mt-6">
                 <button
                   onClick={finish}
                   disabled={loading}
-                  className="text-slate-500 hover:text-slate-300 text-sm font-body transition-colors disabled:opacity-50"
+                  className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-body transition-colors disabled:opacity-50"
                 >
                   Skip & Finish
                 </button>
@@ -248,7 +248,7 @@ function StepNav({ onSkip, onNext, nextLabel = 'Next', nextDisabled = false, loa
     <div className="flex items-center justify-between mt-6">
       <button
         onClick={onSkip}
-        className="text-slate-500 hover:text-slate-300 text-sm font-body transition-colors"
+        className="text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-body transition-colors"
       >
         Skip
       </button>
@@ -268,7 +268,7 @@ function PrimaryButton({ children, onClick, disabled = false, loading = false, i
       whileTap={{ scale: disabled || loading ? 1 : 0.97 }}
       className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold font-heading transition-all duration-200 ${
         disabled || loading
-          ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+          ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
           : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
       }`}
     >

@@ -13,7 +13,6 @@ export default function Navbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-
   const handleLogout = async () => {
     try {
       await logout()
@@ -28,7 +27,7 @@ export default function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b border-slate-100 dark:border-white/5 bg-white/95 dark:bg-slate-950/80 backdrop-blur-xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
@@ -40,14 +39,14 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <Zap className="w-4 h-4 text-white" />
             </div>
-            <span className="text-lg font-heading font-bold text-white tracking-tight hidden sm:block">
+            <span className="text-lg font-heading font-bold text-slate-900 dark:text-white tracking-tight hidden sm:block">
               Tellr
             </span>
           </button>
 
           {/* Nav tabs */}
           {user && (
-            <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700/50 rounded-xl p-1">
+            <div className="flex items-center gap-1 bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/50 rounded-xl p-1">
               {NAV_LINKS.map(({ label, icon: Icon, to }) => {
                 const active = pathname === to || (to === '/groups' && pathname.startsWith('/groups'))
                 return (
@@ -56,8 +55,8 @@ export default function Navbar() {
                     onClick={() => navigate(to)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium font-heading transition-all duration-200 ${
                       active
-                        ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                        ? 'bg-blue-600/20 text-blue-600 dark:text-blue-300 border border-blue-500/30'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -76,21 +75,21 @@ export default function Navbar() {
                   <img
                     src={user.photoURL}
                     alt={user.displayName || 'User'}
-                    className="w-8 h-8 rounded-full ring-2 ring-white/10"
+                    className="w-8 h-8 rounded-full ring-2 ring-slate-200 dark:ring-white/10"
                   />
                 ) : (
                   <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-sm font-semibold text-white">
                     {(user.displayName || user.email || 'U')[0].toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:block text-sm text-slate-300 font-medium max-w-[120px] truncate">
+                <span className="hidden sm:block text-sm text-slate-600 dark:text-slate-300 font-medium max-w-[120px] truncate">
                   {user.displayName || user.email}
                 </span>
               </div>
 
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 text-slate-400 hover:text-white text-sm px-3 py-1.5 rounded-lg hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-white/10"
+                className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-slate-200 dark:hover:border-white/10"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:block">Sign out</span>

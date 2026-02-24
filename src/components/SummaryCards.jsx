@@ -44,7 +44,7 @@ function StatCard({ icon: Icon, label, value, subValue, iconColor, delay = 0, tr
   const trendStyles = {
     up:      { cls: 'bg-rose-500/10 border-rose-500/20 text-rose-400',     arrow: '▲' },
     down:    { cls: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400', arrow: '▼' },
-    neutral: { cls: 'bg-slate-800/40 border-slate-700/40 text-slate-500',   arrow: '●' },
+    neutral: { cls: 'bg-slate-100 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/40 text-slate-400 dark:text-slate-500', arrow: '●' },
   }
   const ts = trend ? trendStyles[trend.direction] : null
 
@@ -54,21 +54,21 @@ function StatCard({ icon: Icon, label, value, subValue, iconColor, delay = 0, tr
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className="glass-card p-5 flex flex-col gap-4 hover:border-white/20 transition-all duration-300 cursor-default"
+      className="glass-card p-5 flex flex-col gap-4 hover:border-slate-300 dark:hover:border-white/20 transition-all duration-300 cursor-default"
     >
       <div className="flex items-start justify-between">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconColor}`}>
           <Icon className="w-5 h-5" />
         </div>
         {subValue && (
-          <span className="text-xs text-slate-500 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">
+          <span className="text-xs text-slate-400 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700/50">
             {subValue}
           </span>
         )}
       </div>
       <div>
-        <p className="text-2xl font-bold font-heading text-white leading-none">{value}</p>
-        <p className="text-sm text-slate-400 mt-1 font-body">{label}</p>
+        <p className="text-2xl font-bold font-heading text-slate-900 dark:text-white leading-none">{value}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-body">{label}</p>
         {trend && ts && (
           <div className={`mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${ts.cls}`}>
             <span>{ts.arrow}</span>

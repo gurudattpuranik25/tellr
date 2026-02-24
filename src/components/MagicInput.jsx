@@ -161,10 +161,10 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
           <div
             className={`relative flex items-center rounded-2xl border transition-all duration-300 ${
               isBusy
-                ? 'border-blue-500/50 bg-slate-900/90'
+                ? 'border-blue-500/50 bg-white/90 dark:bg-slate-900/90'
                 : isFocused
-                ? 'border-blue-500 bg-slate-900'
-                : 'border-slate-700/80 bg-slate-900/60'
+                ? 'border-blue-500 bg-white dark:bg-slate-900'
+                : 'border-slate-300/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60'
             }`}
             style={isFocused ? {
               boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.15), 0 0 40px rgba(59, 130, 246, 0.08)'
@@ -204,7 +204,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 disabled={isBusy || disabled}
-                className="w-full bg-transparent text-white text-base sm:text-lg py-3 sm:py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
+                className="w-full bg-transparent text-slate-900 dark:text-white text-base sm:text-lg py-3 sm:py-4 pr-4 focus:outline-none disabled:opacity-70 font-body placeholder-transparent"
                 placeholder={placeholder}
                 autoComplete="off"
                 autoCorrect="off"
@@ -213,15 +213,15 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
 
               {!value && !isFocused && (
                 <div className="absolute inset-0 flex items-center pointer-events-none">
-                  <span className="text-slate-500 text-lg font-body">
+                  <span className="text-slate-400 dark:text-slate-500 text-lg font-body">
                     {placeholder}
-                    <span className="cursor-blink ml-0.5 text-slate-600">|</span>
+                    <span className="cursor-blink ml-0.5 text-slate-400 dark:text-slate-600">|</span>
                   </span>
                 </div>
               )}
               {!value && isFocused && (
                 <div className="absolute inset-0 flex items-center pointer-events-none">
-                  <span className="text-slate-600 text-lg font-body">
+                  <span className="text-slate-400 dark:text-slate-600 text-lg font-body">
                     Type an expense... Press Enter to parse
                   </span>
                 </div>
@@ -241,8 +241,8 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
                   title="Scan receipt"
                   className={`p-2 rounded-xl transition-all duration-200 ${
                     isBusy || disabled
-                      ? 'text-slate-600 cursor-not-allowed'
-                      : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                      ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                      : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'
                   }`}
                 >
                   <Camera className="w-4 h-4" />
@@ -258,7 +258,7 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 font-heading ${
                   value.trim() && !isBusy
                     ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed'
                 }`}
               >
                 {isParsing ? (
@@ -291,13 +291,13 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
               <ChevronDown className="w-3 h-3" />
             </button>
             {showDatePicker && (
-              <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-10 bg-slate-900 border border-slate-700 rounded-xl p-2 shadow-xl">
+              <div className="absolute top-full mt-1 left-1/2 -translate-x-1/2 z-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-xl">
                 <input
                   type="date"
                   value={selectedDate}
                   max={todayISO()}
                   onChange={e => { setSelectedDate(e.target.value); setShowDatePicker(false) }}
-                  className="bg-transparent text-white text-sm font-body focus:outline-none [color-scheme:dark]"
+                  className="bg-transparent text-slate-900 dark:text-white text-sm font-body focus:outline-none [color-scheme:light] dark:[color-scheme:dark]"
                   autoFocus
                 />
               </div>
@@ -331,8 +331,8 @@ export default function MagicInput({ onSubmit, disabled, onScanReceipt }) {
 
         {/* Hint text */}
         {!isBusy && (
-          <p className="text-center text-slate-600 text-xs mt-3 font-body">
-            Press <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-500 text-xs border border-slate-700">Enter</kbd> to add
+          <p className="text-center text-slate-400 dark:text-slate-600 text-xs mt-3 font-body">
+            Press <kbd className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-500 text-xs border border-slate-200 dark:border-slate-700">Enter</kbd> to add
             {onScanReceipt && <> • <Camera className="w-3 h-3 inline mb-0.5 mx-0.5" /> to scan a receipt</>}
             {' '}• Claude auto-parses category, vendor &amp; date
           </p>

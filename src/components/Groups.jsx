@@ -13,7 +13,7 @@ import { findUserByEmail } from '../services/userService'
 function Avatar({ member, size = 'sm' }) {
   const sz = size === 'sm' ? 'w-7 h-7 text-xs' : 'w-9 h-9 text-sm'
   if (member.photoURL) {
-    return <img src={member.photoURL} alt={member.displayName} className={`${sz} rounded-full ring-2 ring-slate-800 object-cover`} />
+    return <img src={member.photoURL} alt={member.displayName} className={`${sz} rounded-full ring-2 ring-slate-200 dark:ring-slate-800 object-cover`} />
   }
   return (
     <div className={`${sz} rounded-full bg-blue-600/30 border border-blue-500/30 flex items-center justify-center font-semibold text-blue-300`}>
@@ -91,29 +91,29 @@ function CreateGroupModal({ currentUser, onClose, onCreated }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold font-heading text-white">New Group</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 transition-colors">
+          <h2 className="text-base font-semibold font-heading text-slate-900 dark:text-white">New Group</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Group name */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">Group name</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">Group name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
             placeholder="Weekend trip, Flatmates..."
-            className="w-full bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
+            className="w-full bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
             autoFocus
           />
         </div>
 
         {/* Add members */}
         <div>
-          <label className="text-xs text-slate-400 font-body mb-1.5 block">Add members by email</label>
+          <label className="text-xs text-slate-500 dark:text-slate-400 font-body mb-1.5 block">Add members by email</label>
           <div className="flex gap-2">
             <input
               type="email"
@@ -121,12 +121,12 @@ function CreateGroupModal({ currentUser, onClose, onCreated }) {
               onChange={(e) => setEmailInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && addMember()}
               placeholder="friend@example.com"
-              className="flex-1 bg-slate-800/60 border border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
+              className="flex-1 bg-white/80 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500/60 font-body"
             />
             <button
               onClick={addMember}
               disabled={searching || !emailInput.trim()}
-              className="px-4 py-2.5 rounded-xl bg-slate-700/60 border border-slate-600/50 text-slate-300 text-sm hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-body"
+              className="px-4 py-2.5 rounded-xl bg-slate-100/60 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600/50 text-slate-600 dark:text-slate-300 text-sm hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all font-body"
             >
               {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             </button>
@@ -137,17 +137,17 @@ function CreateGroupModal({ currentUser, onClose, onCreated }) {
         {members.length > 0 && (
           <div className="space-y-2">
             {members.map((m) => (
-              <div key={m.uid} className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-800/40 border border-slate-700/40">
+              <div key={m.uid} className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50/40 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/40">
                 <div className="flex items-center gap-2.5">
                   <Avatar member={m} />
                   <div>
-                    <p className="text-sm text-slate-200 font-body">{m.displayName || m.email}</p>
-                    <p className="text-xs text-slate-500 font-body">{m.email}</p>
+                    <p className="text-sm text-slate-700 dark:text-slate-200 font-body">{m.displayName || m.email}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 font-body">{m.email}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setMembers((prev) => prev.filter((x) => x.uid !== m.uid))}
-                  className="p-1 rounded-lg text-slate-600 hover:text-slate-400 transition-colors"
+                  className="p-1 rounded-lg text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -176,7 +176,7 @@ export default function Groups() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-600/4 rounded-full blur-3xl" />
@@ -192,8 +192,8 @@ export default function Groups() {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h2 className="text-2xl font-heading font-bold text-white">Groups</h2>
-            <p className="text-slate-500 text-sm mt-1 font-body">Split expenses with friends</p>
+            <h2 className="text-2xl font-heading font-bold text-slate-900 dark:text-white">Groups</h2>
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-1 font-body">Split expenses with friends</p>
           </div>
           <button
             onClick={() => setShowCreate(true)}
@@ -207,7 +207,7 @@ export default function Groups() {
         {/* Group cards */}
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-6 h-6 text-slate-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-slate-400 dark:text-slate-500 animate-spin" />
           </div>
         ) : groups.length === 0 ? (
           <motion.div
@@ -215,11 +215,11 @@ export default function Groups() {
             animate={{ opacity: 1, y: 0 }}
             className="glass-card p-12 text-center"
           >
-            <div className="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/40 flex items-center justify-center mx-auto mb-4">
-              <Users className="w-6 h-6 text-slate-500" />
+            <div className="w-12 h-12 rounded-2xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/40 flex items-center justify-center mx-auto mb-4">
+              <Users className="w-6 h-6 text-slate-400 dark:text-slate-500" />
             </div>
-            <p className="text-slate-300 font-heading font-semibold mb-1">No groups yet</p>
-            <p className="text-slate-500 text-sm font-body mb-5">
+            <p className="text-slate-700 dark:text-slate-300 font-heading font-semibold mb-1">No groups yet</p>
+            <p className="text-slate-400 dark:text-slate-500 text-sm font-body mb-5">
               Create a group to split expenses with friends or housemates.
             </p>
             <button
@@ -238,18 +238,18 @@ export default function Groups() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 onClick={() => navigate(`/groups/${group.id}`)}
-                className="glass-card p-5 text-left hover:border-slate-600/60 transition-all duration-200 group"
+                className="glass-card p-5 text-left hover:border-slate-300 dark:hover:border-slate-600/60 transition-all duration-200 group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-10 h-10 rounded-xl bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
                     <Users className="w-5 h-5 text-blue-400" />
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors mt-1" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 dark:text-slate-600 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors mt-1" />
                 </div>
-                <p className="text-base font-semibold font-heading text-white mb-1 truncate">
+                <p className="text-base font-semibold font-heading text-slate-900 dark:text-white mb-1 truncate">
                   {group.name}
                 </p>
-                <p className="text-xs text-slate-500 font-body mb-4">
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-body mb-4">
                   {group.members?.length || 1} member{(group.members?.length || 1) !== 1 ? 's' : ''}
                 </p>
                 <div className="flex -space-x-2">
@@ -257,7 +257,7 @@ export default function Groups() {
                     <Avatar key={m.uid} member={m} />
                   ))}
                   {(group.members?.length || 0) > 5 && (
-                    <div className="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-800 flex items-center justify-center text-xs text-slate-400 font-body">
+                    <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-slate-100 dark:border-slate-800 flex items-center justify-center text-xs text-slate-500 dark:text-slate-400 font-body">
                       +{group.members.length - 5}
                     </div>
                   )}

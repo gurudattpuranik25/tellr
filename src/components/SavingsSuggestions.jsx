@@ -61,14 +61,14 @@ export default function SavingsSuggestions({ isOpen, onClose, expenses }) {
               onClick={e => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700/50 flex-shrink-0">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700/50 flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-amber-500/15 border border-amber-500/25 flex items-center justify-center">
                     <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold font-heading text-slate-200">Smart Savings Tips</p>
-                    <p className="text-xs text-slate-500 font-body">Powered by Claude</p>
+                    <p className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Smart Savings Tips</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 font-body">Powered by Claude</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
@@ -77,14 +77,14 @@ export default function SavingsSuggestions({ isOpen, onClose, expenses }) {
                       onClick={load}
                       disabled={loading || expenses.length < 3}
                       title="Refresh suggestions"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
+                      className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-200"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
                   )}
                   <button
                     onClick={onClose}
-                    className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 transition-colors duration-200"
+                    className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors duration-200"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -103,7 +103,7 @@ export default function SavingsSuggestions({ isOpen, onClose, expenses }) {
                       className="flex items-center gap-2 py-12 justify-center"
                     >
                       <Loader2 className="w-4 h-4 text-amber-400 animate-spin" />
-                      <span className="text-sm text-slate-500 font-body">Analysing your spending habits...</span>
+                      <span className="text-sm text-slate-400 dark:text-slate-500 font-body">Analysing your spending habits...</span>
                     </motion.div>
                   ) : error ? (
                     <motion.div
@@ -141,7 +141,7 @@ export default function SavingsSuggestions({ isOpen, onClose, expenses }) {
                             {i + 1}
                           </span>
                           <div className="min-w-0">
-                            <p className="text-sm text-slate-200 font-body leading-relaxed">{s.tip}</p>
+                            <p className="text-sm text-slate-700 dark:text-slate-200 font-body leading-relaxed">{s.tip}</p>
                             {s.potential && (
                               <span className="mt-1.5 inline-block text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-body">
                                 Save {s.potential}
@@ -162,7 +162,7 @@ export default function SavingsSuggestions({ isOpen, onClose, expenses }) {
                       <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
                         <Lightbulb className="w-5 h-5 text-amber-400" />
                       </div>
-                      <p className="text-sm text-slate-500 font-body text-center max-w-xs">
+                      <p className="text-sm text-slate-400 dark:text-slate-500 font-body text-center max-w-xs">
                         {expenses.length < 3
                           ? 'Add at least 3 expenses to get personalised savings tips.'
                           : 'Get AI-powered savings suggestions based on your spending habits.'}

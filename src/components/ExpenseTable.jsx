@@ -54,10 +54,10 @@ function CategoryBadge({ category }) {
 
 function SkeletonRow() {
   return (
-    <tr className="border-b border-white/5">
+    <tr className="border-b border-slate-100 dark:border-white/5">
       {[1, 2, 3, 4, 5].map(i => (
         <td key={i} className="px-4 py-3.5">
-          <div className="h-4 bg-slate-800/80 rounded animate-pulse" style={{ width: `${60 + i * 10}%` }} />
+          <div className="h-4 bg-slate-200/80 dark:bg-slate-800/80 rounded animate-pulse" style={{ width: `${60 + i * 10}%` }} />
         </td>
       ))}
     </tr>
@@ -74,7 +74,7 @@ function FilterSelect({ value, onChange, children, icon: Icon }) {
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className={`appearance-none bg-slate-800/60 border border-slate-700/60 rounded-xl text-sm text-slate-300 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all duration-200 font-body pr-7 py-2 cursor-pointer hover:border-slate-600 [color-scheme:dark] ${
+        className={`appearance-none bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-600 dark:text-slate-300 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all duration-200 font-body pr-7 py-2 cursor-pointer hover:border-slate-300 dark:hover:border-slate-600 [color-scheme:light] dark:[color-scheme:dark] ${
           Icon ? 'pl-8' : 'pl-3'
         }`}
       >
@@ -166,14 +166,14 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
         className="glass-card overflow-hidden"
       >
         {/* ── Header ── */}
-        <div className="px-5 py-4 border-b border-white/5 flex flex-wrap items-center gap-3 justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex flex-wrap items-center gap-3 justify-between">
           <div className="flex items-center gap-2">
-            <Receipt className="w-4 h-4 text-slate-400" />
-            <h3 className="text-sm font-semibold font-heading text-slate-200">Transactions</h3>
-            <span className="text-xs text-slate-500 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">
+            <Receipt className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+            <h3 className="text-sm font-semibold font-heading text-slate-700 dark:text-slate-200">Transactions</h3>
+            <span className="text-xs text-slate-500 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700/50">
               {displayedExpenses.length}
               {displayedExpenses.length !== monthExpenses.length && (
-                <span className="text-slate-600"> / {monthExpenses.length}</span>
+                <span className="text-slate-400 dark:text-slate-600"> / {monthExpenses.length}</span>
               )}
             </span>
           </div>
@@ -184,7 +184,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
             className={`sm:hidden flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-all duration-200 font-body ${
               isFiltered
                 ? 'bg-blue-600/20 border-blue-500/40 text-blue-400'
-                : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                : 'bg-slate-100/80 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -201,12 +201,12 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="bg-slate-800/60 border border-slate-700/60 rounded-xl pl-8 pr-8 py-2 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all duration-200 font-body w-40 hover:border-slate-600"
+                className="bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl pl-8 pr-8 py-2 text-sm text-slate-700 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all duration-200 font-body w-40 hover:border-slate-300 dark:hover:border-slate-600"
               />
               {search && (
                 <button
                   onClick={() => setSearch('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -238,7 +238,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={clearFilters}
-                  className="flex items-center gap-1 text-xs text-slate-400 hover:text-white px-2.5 py-2 rounded-lg hover:bg-white/5 border border-slate-700/60 hover:border-slate-600 transition-all duration-200 font-body"
+                  className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2.5 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 border border-slate-200 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200 font-body"
                 >
                   <X className="w-3 h-3" />
                   Clear
@@ -256,7 +256,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="overflow-hidden sm:hidden border-b border-white/5"
+              className="overflow-hidden sm:hidden border-b border-slate-100 dark:border-white/5"
             >
               <div className="px-5 py-4 flex flex-col gap-3">
                 {/* Search */}
@@ -267,7 +267,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     placeholder="Search by description or vendor..."
-                    className="w-full bg-slate-800/60 border border-slate-700/60 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 transition-all duration-200 font-body"
+                    className="w-full bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl pl-8 pr-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-blue-500/60 transition-all duration-200 font-body"
                   />
                 </div>
 
@@ -297,7 +297,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                 {isFiltered && (
                   <button
                     onClick={clearFilters}
-                    className="flex items-center justify-center gap-1.5 text-sm text-slate-400 hover:text-white py-2 rounded-xl hover:bg-white/5 border border-slate-700/60 transition-all duration-200 font-body"
+                    className="flex items-center justify-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 border border-slate-200 dark:border-slate-700/60 transition-all duration-200 font-body"
                   >
                     <X className="w-3.5 h-3.5" />
                     Clear all filters
@@ -315,9 +315,9 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="px-5 py-2.5 border-b border-white/5 flex flex-wrap items-center gap-2"
+              className="px-5 py-2.5 border-b border-slate-100 dark:border-white/5 flex flex-wrap items-center gap-2"
             >
-              <span className="text-xs text-slate-500 font-body">Showing:</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-body">Showing:</span>
 
               {search.trim() && (
                 <span className="inline-flex items-center gap-1 text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full font-body">
@@ -341,8 +341,8 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
               )}
 
               {displayedExpenses.length > 0 && (
-                <span className="ml-auto text-xs text-slate-500 font-body">
-                  Total: <span className="text-slate-300 font-heading">₹{filteredTotal.toFixed(2)}</span>
+                <span className="ml-auto text-xs text-slate-400 dark:text-slate-500 font-body">
+                  Total: <span className="text-slate-600 dark:text-slate-300 font-heading">₹{filteredTotal.toFixed(2)}</span>
                 </span>
               )}
             </motion.div>
@@ -352,32 +352,32 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
         {/* ── Mobile cards ── */}
         <div className="sm:hidden">
           {loading ? (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-slate-100 dark:divide-white/5">
               {[1, 2, 3].map(i => (
                 <div key={i} className="px-4 py-3.5 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-800/80 animate-pulse flex-shrink-0" />
+                  <div className="w-9 h-9 rounded-xl bg-slate-200/80 dark:bg-slate-800/80 animate-pulse flex-shrink-0" />
                   <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-slate-800/80 rounded animate-pulse w-3/4" />
-                    <div className="h-3 bg-slate-800/80 rounded animate-pulse w-1/2" />
+                    <div className="h-4 bg-slate-200/80 dark:bg-slate-800/80 rounded animate-pulse w-3/4" />
+                    <div className="h-3 bg-slate-200/80 dark:bg-slate-800/80 rounded animate-pulse w-1/2" />
                   </div>
-                  <div className="h-4 bg-slate-800/80 rounded animate-pulse w-14" />
+                  <div className="h-4 bg-slate-200/80 dark:bg-slate-800/80 rounded animate-pulse w-14" />
                 </div>
               ))}
             </div>
           ) : displayedExpenses.length === 0 ? (
             <div className="px-5 py-16 text-center">
               <div className="flex flex-col items-center gap-3">
-                <div className="w-12 h-12 bg-slate-800/60 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-slate-100/80 dark:bg-slate-800/60 rounded-2xl flex items-center justify-center">
                   {isFiltered
-                    ? <Search className="w-6 h-6 text-slate-600" />
-                    : <Receipt className="w-6 h-6 text-slate-600" />
+                    ? <Search className="w-6 h-6 text-slate-400 dark:text-slate-600" />
+                    : <Receipt className="w-6 h-6 text-slate-400 dark:text-slate-600" />
                   }
                 </div>
                 <div>
-                  <p className="text-slate-400 font-medium font-heading">
+                  <p className="text-slate-500 dark:text-slate-400 font-medium font-heading">
                     {isFiltered ? 'No matching transactions' : 'No expenses yet'}
                   </p>
-                  <p className="text-slate-600 text-sm mt-1 font-body">
+                  <p className="text-slate-400 dark:text-slate-600 text-sm mt-1 font-body">
                     {isFiltered
                       ? <button onClick={clearFilters} className="text-blue-400 hover:underline">Clear filters</button>
                       : 'Type an expense above to get started'
@@ -387,7 +387,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
               </div>
             </div>
           ) : (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-slate-100 dark:divide-white/5">
               {displayedExpenses.map(expense => {
                 const config = CATEGORY_CONFIG[expense.category] || CATEGORY_CONFIG['Other']
                 return (
@@ -397,7 +397,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium text-white font-body truncate flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-900 dark:text-white font-body truncate flex-1 min-w-0">
                           {expense.description}
                           {recurringIds.has(expense.id) && (
                             <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-violet-500/15 text-violet-400 border border-violet-500/25">
@@ -405,12 +405,12 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                             </span>
                           )}
                         </p>
-                        <span className="text-sm font-semibold text-white font-heading tabular-nums flex-shrink-0 ml-2">
+                        <span className="text-sm font-semibold text-slate-900 dark:text-white font-heading tabular-nums flex-shrink-0 ml-2">
                           ₹{expense.amount.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between mt-1">
-                        <p className="text-xs text-slate-500 font-body">
+                        <p className="text-xs text-slate-400 dark:text-slate-500 font-body">
                           {formatDate(expense.date)}
                           {expense.vendor && expense.vendor !== 'Unknown' && ` · ${expense.vendor}`}
                         </p>
@@ -441,7 +441,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
         <div className="hidden sm:block overflow-x-auto">
           <table className="w-full min-w-[600px]">
             <thead>
-              <tr className="border-b border-white/5">
+              <tr className="border-b border-slate-100 dark:border-white/5">
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-5 py-3 font-heading">Date</th>
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading">Description</th>
                 <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-4 py-3 font-heading">Vendor</th>
@@ -456,17 +456,17 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                 <tr>
                   <td colSpan={5} className="px-5 py-16 text-center">
                     <div className="flex flex-col items-center gap-3">
-                      <div className="w-12 h-12 bg-slate-800/60 rounded-2xl flex items-center justify-center">
+                      <div className="w-12 h-12 bg-slate-100/80 dark:bg-slate-800/60 rounded-2xl flex items-center justify-center">
                         {isFiltered
-                          ? <Search className="w-6 h-6 text-slate-600" />
-                          : <Receipt className="w-6 h-6 text-slate-600" />
+                          ? <Search className="w-6 h-6 text-slate-400 dark:text-slate-600" />
+                          : <Receipt className="w-6 h-6 text-slate-400 dark:text-slate-600" />
                         }
                       </div>
                       <div>
-                        <p className="text-slate-400 font-medium font-heading">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium font-heading">
                           {isFiltered ? 'No matching transactions' : 'No expenses yet'}
                         </p>
-                        <p className="text-slate-600 text-sm mt-1 font-body">
+                        <p className="text-slate-400 dark:text-slate-600 text-sm mt-1 font-body">
                           {isFiltered
                             ? <button onClick={clearFilters} className="text-blue-400 hover:underline">Clear filters</button>
                             : 'Type an expense above to get started'
@@ -487,17 +487,17 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                     animate={{ opacity: 1, x: 0, backgroundColor: 'rgba(0, 0, 0, 0)' }}
                     exit={{ opacity: 0, x: 10, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="group border-b border-white/5 last:border-0 hover:bg-white/3 transition-colors duration-150"
+                    className="group border-b border-slate-100 dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/3 transition-colors duration-150"
                   >
                     <td className="px-5 py-3.5">
-                      <span className="text-sm text-slate-400 font-body whitespace-nowrap">
+                      <span className="text-sm text-slate-500 dark:text-slate-400 font-body whitespace-nowrap">
                         {formatDate(expense.date)}
                       </span>
                     </td>
 
                     <td className="px-4 py-3.5 max-w-[180px]">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <p className="text-sm text-white font-medium truncate font-body">
+                        <p className="text-sm text-slate-900 dark:text-white font-medium truncate font-body">
                           {expense.description}
                         </p>
                         {recurringIds.has(expense.id) && (
@@ -508,16 +508,16 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                         )}
                       </div>
                       {expense.text && (
-                        <p className="text-xs text-slate-600 truncate mt-0.5 font-body">
+                        <p className="text-xs text-slate-400 dark:text-slate-600 truncate mt-0.5 font-body">
                           "{expense.text.slice(0, 50)}{expense.text.length > 50 ? '…' : ''}"
                         </p>
                       )}
                     </td>
 
                     <td className="px-4 py-3.5">
-                      <span className="text-sm text-slate-300 font-body">
+                      <span className="text-sm text-slate-600 dark:text-slate-300 font-body">
                         {expense.vendor === 'Unknown'
-                          ? <span className="text-slate-600 italic">—</span>
+                          ? <span className="text-slate-400 dark:text-slate-600 italic">—</span>
                           : expense.vendor
                         }
                       </span>
@@ -529,7 +529,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
 
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1.5">
-                        <span className="text-sm font-semibold text-white font-heading tabular-nums mr-2">
+                        <span className="text-sm font-semibold text-slate-900 dark:text-white font-heading tabular-nums mr-2">
                           ₹{expense.amount.toFixed(2)}
                         </span>
                         <motion.button
@@ -537,7 +537,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           title="Edit"
-                          className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-blue-400 transition-all duration-200 p-1 rounded-lg hover:bg-blue-500/10"
+                          className="opacity-0 group-hover:opacity-100 text-slate-400 dark:text-slate-600 hover:text-blue-400 transition-all duration-200 p-1 rounded-lg hover:bg-blue-500/10"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                         </motion.button>
@@ -546,7 +546,7 @@ export default function ExpenseTable({ expenses, onDelete, onUpdate, loading, se
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           title="Delete"
-                          className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-rose-400 transition-all duration-200 p-1 rounded-lg hover:bg-rose-500/10"
+                          className="opacity-0 group-hover:opacity-100 text-slate-400 dark:text-slate-600 hover:text-rose-400 transition-all duration-200 p-1 rounded-lg hover:bg-rose-500/10"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </motion.button>
